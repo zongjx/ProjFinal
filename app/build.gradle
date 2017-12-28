@@ -31,4 +31,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile files('src/main/libs/mysql-connector-java-5.1.45-bin.jar')
+    compile 'com.github.tslamic.fancybackground:library:1.0'
 }
