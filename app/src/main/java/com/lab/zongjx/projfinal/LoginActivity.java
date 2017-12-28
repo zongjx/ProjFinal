@@ -1,7 +1,10 @@
 package com.lab.zongjx.projfinal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +16,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import tslamic.fancybg.FancyBackground;
 
 public class LoginActivity extends AppCompatActivity implements FancyBackground.FancyListener{
     private static final String TAG = "FancyBackground";
+    private final int WRONG_PASSWORD = 1;
+    private final int NOT_EXIST = 2;
     private TextInputLayout account_layout;
     private TextInputLayout password_layout;
     private Button login;
@@ -49,6 +60,17 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
                 .interval(4000)
                 .start();
 
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch(msg.what){
+                    case 123:
+                        break;
+                }
+            }
+        };
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +83,64 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
                     password_layout.setError("密码不能为空哦！");
                 }
                 else{
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while(!Thread.interrupted()){
+                                try{
+                                    Thread.sleep(100);
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                }catch (InterruptedException e){
+                                    Log.v("ss",e.toString());
+                                }catch (ClassNotFoundException e){
+                                    e.printStackTrace();
+                                }
 
+                                String ip = "120.78.73.208";
+                                int port = 3306;
+                                String dbName = "android";
+                                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName;
+                                String USER = "root";
+                                String PASSWORD = "123456";
+
+                                try{
+                                    Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+                                    Log.v("ss","success");
+                                    String sql = "select * from user where account = '" + account + "';";
+                                    Statement st = (Statement) conn.createStatement();
+                                    ResultSet rs = st.executeQuery(sql);
+                                    if(rs.next()){
+                                        Log.v("name","success");
+                                        if(rs.getString("password").equals(password.getText().toString())){
+                                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                            Bundle extras = new Bundle();
+                                            extras.putInt("id",rs.getInt("id"));
+                                            extras.putString("account",rs.getString("account"));
+                                            intent.putExtras(extras);
+                                            rs.close();
+                                            st.close();
+                                            conn.close();
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        else{
+                                            handler.obtainMessage(WRONG_PASSWORD).sendToTarget();
+                                        }
+                                    }
+                                    else{
+                                        handler.obtainMessage(NOT_EXIST).sendToTarget();
+                                    }
+                                    rs.close();
+                                    st.close();
+                                    conn.close();
+                                    return;
+                                }catch(SQLException e){
+                                    Log.v("ss","fail");
+                                    Log.v("ss",e.getMessage());
+                                }
+                            }
+                        }
+                    });
                 }
             }
         });

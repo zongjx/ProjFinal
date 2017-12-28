@@ -18,6 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="20dp"
         android:text="组啊组校园组队系统"
+        android:textColor="#000000"
         android:textSize="25sp"/>
 
     <ImageView
@@ -36,6 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="90dp"
         android:layout_marginTop="60dp"
+        android:textColorHint="#333333"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo_login">
@@ -47,6 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:shadowColor="@color/colorPrimaryDark"
             android:hint="请输入账号"
             android:textSize="20sp"
             android:inputType="text"
@@ -58,6 +61,7 @@
         android:id="@+id/textInputLayout_password_login"
         android:layout_width="0dp"
         android:layout_height="90dp"
+        android:textColorHint="#333333"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout_account_login">
@@ -69,6 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:shadowColor="@color/colorPrimaryDark"
             android:hint="请输入密码"
             android:textSize="20sp"
             android:inputType="textPassword"
