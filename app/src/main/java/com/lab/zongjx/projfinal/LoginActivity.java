@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -57,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
                 .set(R.drawable.fbg_fst, R.drawable.fbg_snd, R.drawable.fbg_trd)
                 .inAnimation(R.anim.fade_in)
                 .outAnimation(R.anim.fade_out)
-                .interval(4000)
+                .interval(3000)
                 .start();
 
         Handler handler = new Handler(){
@@ -65,8 +66,15 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 switch(msg.what){
-                    case 123:
+                    case WRONG_PASSWORD:{
+                        Toast.makeText(getApplicationContext(),"账号或密码错误！",Toast.LENGTH_SHORT).show();
                         break;
+                    }
+                    case NOT_EXIST:{
+                        Toast.makeText(getApplicationContext(),"账号不存在！",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+
                 }
             }
         };
@@ -142,6 +150,22 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
                         }
                     });
                 }
+            }
+        });
+
+        forget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(LoginActivity.this,);
+                //startActivity(intent);
+            }
+        });
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(LoginActivity.this,);
+                //startActivity(intent);
             }
         });
 

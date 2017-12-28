@@ -40,9 +40,10 @@
         android:textColorHint="#333333"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo_login">
+        app:layout_constraintTop_toBottomOf="@id/logo_login"
+        app:hintTextAppearance="@style/myhint">
 
-
+layout/activity_login.xml:46
         <EditText
             android:id="@+id/account_login"
             android:layout_width="match_parent"
@@ -64,7 +65,8 @@
         android:textColorHint="#333333"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_account_login">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_account_login"
+        app:hintTextAppearance="@style/myhint">
 
 
         <EditText
