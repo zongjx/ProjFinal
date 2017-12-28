@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
                                 try{
                                     Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                                     Log.v("ss","success");
-                                    String sql = "select * from user where account = '" + account + "';";
+                                    String sql = "select * from user where account = '" + account.getText().toString() + "';";
                                     Statement st = (Statement) conn.createStatement();
                                     ResultSet rs = st.executeQuery(sql);
                                     if(rs.next()){
