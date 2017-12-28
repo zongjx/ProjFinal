@@ -21,8 +21,10 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
                 .set(R.drawable.fbg_fst, R.drawable.fbg_snd, R.drawable.fbg_trd)
                 .inAnimation(R.anim.fade_in)
                 .outAnimation(R.anim.fade_out)
-                .interval(2500)
+                .interval(3500)
                 .start();
+
+
     }
 
 
