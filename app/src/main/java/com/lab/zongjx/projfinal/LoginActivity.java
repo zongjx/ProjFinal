@@ -1,7 +1,6 @@
 package com.lab.zongjx.projfinal;
 
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +15,10 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        final View view = findViewById(R.id.parent);
+        final View view = findViewById(R.id.parent_login);
 
         FancyBackground.on(view)
-                .set(R.mipmap.fbg_fst, R.mipmap.fbg_snd, R.mipmap.fbg_trd)
+                .set(R.drawable.fbg_fst, R.drawable.fbg_snd, R.drawable.fbg_trd)
                 .inAnimation(R.anim.fade_in)
                 .outAnimation(R.anim.fade_out)
                 .interval(2500)
