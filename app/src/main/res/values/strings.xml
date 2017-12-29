@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">ProjFinal</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">主页</string>
+    <string name="title_chat">交流</string>
+    <string name="title_team">我的组队</string>
 </resources>

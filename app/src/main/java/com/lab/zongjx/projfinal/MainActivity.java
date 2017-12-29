@@ -1,9 +1,11 @@
 package com.lab.zongjx.projfinal;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.*;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> choice;
     private MyMenuAdapter choice_adapter;
     private Intent intent;
+    private FrameLayout homepage = (FrameLayout) findViewById(R.id.home_main);
+    private FrameLayout chatpage = (FrameLayout) findViewById(R.id.chat_main);
+    private FrameLayout teampage = (FrameLayout) findViewById(R.id.team_main);
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -41,15 +47,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_home:
-
+                case R.id.navigation_home:{
+                    homepage.setVisibility(View.VISIBLE);
+                    chatpage.setVisibility(View.GONE);
+                    teampage.setVisibility(View.GONE);
                     return true;
-                case R.id.navigation_dashboard:
-
+                }
+                case R.id.navigation_chat:{
+                    homepage.setVisibility(View.GONE);
+                    chatpage.setVisibility(View.VISIBLE);
+                    teampage.setVisibility(View.GONE);
                     return true;
-                case R.id.navigation_notifications:
-
+                }
+                case R.id.navigation_team:{
+                    homepage.setVisibility(View.GONE);
+                    chatpage.setVisibility(View.GONE);
+                    teampage.setVisibility(View.VISIBLE);
                     return true;
+                }
             }
             return false;
         }
@@ -97,12 +112,35 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0:{
+
                         break;
                     }
                     case 1:{
+                        Intent nintent = new Intent(MainActivity.this,NewPasswordActivity.class);
+                        Bundle nexteas = new Bundle();
+                        nexteas.putString("account",intent.getExtras().getString("account"));
+                        intent.putExtras(nexteas);
+                        startActivity(nintent);
                         break;
                     }
                     case 2:{
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+                        alertDialog.setTitle("返回")
+                                .setMessage("确认要退出登录吗？")
+                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+                                    }
+                                })
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                                .create()
+                                .show();
                         break;
                     }
                 }
