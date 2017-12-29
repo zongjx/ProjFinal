@@ -106,8 +106,8 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
 
                                 String ip = "120.78.73.208";
                                 int port = 3306;
-                                String dbName = "android";
-                                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName;
+                                String dbName = "zuazu";
+                                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
                                 String USER = "root";
                                 String PASSWORD = "123456";
 
@@ -149,6 +149,7 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
                             }
                         }
                     });
+                    thread.start();
                 }
             }
         });
