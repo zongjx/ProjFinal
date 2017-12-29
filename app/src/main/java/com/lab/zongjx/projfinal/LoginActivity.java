@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
                                             Bundle extras = new Bundle();
                                             extras.putInt("id",rs.getInt("id"));
                                             extras.putString("account",rs.getString("account"));
+                                            extras.putString("nickname",rs.getString("nickname"));
                                             intent.putExtras(extras);
                                             rs.close();
                                             st.close();

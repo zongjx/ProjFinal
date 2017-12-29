@@ -1,5 +1,6 @@
 package com.lab.zongjx.projfinal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -7,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.*;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +19,11 @@ import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 
 import org.w3c.dom.ls.LSException;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView nickname;
     private ListView menu;
     private ArrayList<String> choice;
-    private MenuAdapter choice_adapter;
+    private MyMenuAdapter choice_adapter;
+    private Intent intent;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -51,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        intent = this.getIntent();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -78,9 +88,30 @@ public class MainActivity extends AppCompatActivity {
             add("修改密码");
             add("注销账号");
         }};
-        choice_adapter = new MenuAdapter(this,choice) {
+        choice_adapter = new MyMenuAdapter(this,choice) {
         };
         menu.setAdapter(choice_adapter);
+
+        menu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+                    case 0:{
+                        break;
+                    }
+                    case 1:{
+                        break;
+                    }
+                    case 2:{
+                        break;
+                    }
+                }
+            }
+        });
+
+        String temps = "您好！  " + intent.getExtras().getString("nickname");
+        nickname.setText(temps);
+
 
 
 
