@@ -25,8 +25,8 @@ import java.sql.Statement;
 
 import tslamic.fancybg.FancyBackground;
 
-public class LoginActivity extends AppCompatActivity implements FancyBackground.FancyListener{
-    private static final String TAG = "FancyBackground";
+public class LoginActivity extends AppCompatActivity {
+//    private static final String TAG = "FancyBackground";
     private final int WRONG_PASSWORD = 1;
     private final int NOT_EXIST = 2;
     private TextInputLayout account_layout;
@@ -54,12 +54,12 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
         constraintLayout = (ConstraintLayout) findViewById(R.id.parent_login);
         view = (View) findViewById(R.id.parent_login);
 
-        FancyBackground.on(view)
-                .set(R.drawable.fbg_fst, R.drawable.fbg_snd, R.drawable.fbg_trd)
-                .inAnimation(R.anim.fade_in)
-                .outAnimation(R.anim.fade_out)
-                .interval(3000)
-                .start();
+//        FancyBackground.on(view)
+//                .set(R.drawable.fbg_fst, R.drawable.fbg_snd, R.drawable.fbg_trd)
+//                .inAnimation(R.anim.fade_in)
+//                .outAnimation(R.anim.fade_out)
+//                .interval(3000)
+//                .start();
 
         Handler handler = new Handler(){
             @Override
@@ -191,24 +191,24 @@ public class LoginActivity extends AppCompatActivity implements FancyBackground.
 
     }
 
-    @Override
-    public void onStarted(FancyBackground bg) {
-        Log.d(TAG, "Started FancyBackground.");
-    }
-
-    @Override
-    public void onNew(FancyBackground bg) {
-        Log.d(TAG, "New pic loaded.");
-    }
-
-    @Override
-    public void onStopped(FancyBackground bg) {
-        Log.d(TAG, "Stopped FancyBackground.");
-    }
-
-    @Override
-    public void onLoopDone(FancyBackground bg) {
-        Log.d(TAG, "Loop complete.");
-    }
+//    @Override
+//    public void onStarted(FancyBackground bg) {
+//        Log.d(TAG, "Started FancyBackground.");
+//    }
+//
+//    @Override
+//    public void onNew(FancyBackground bg) {
+//        Log.d(TAG, "New pic loaded.");
+//    }
+//
+//    @Override
+//    public void onStopped(FancyBackground bg) {
+//        Log.d(TAG, "Stopped FancyBackground.");
+//    }
+//
+//    @Override
+//    public void onLoopDone(FancyBackground bg) {
+//        Log.d(TAG, "Loop complete.");
+//    }
 
 }

@@ -43,7 +43,6 @@
         app:layout_constraintTop_toBottomOf="@id/logo_login"
         app:hintTextAppearance="@style/myhint">
 
-layout/activity_login.xml:46
         <EditText
             android:id="@+id/account_login"
             android:layout_width="match_parent"
