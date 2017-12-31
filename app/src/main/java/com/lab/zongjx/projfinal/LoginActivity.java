@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +30,12 @@ public class LoginActivity extends AppCompatActivity {
 //    private static final String TAG = "FancyBackground";
     private final int WRONG_PASSWORD = 1;
     private final int NOT_EXIST = 2;
+    private final int LOADING= 3;
+    private final int FINISH = 4;
     private TextInputLayout account_layout;
     private TextInputLayout password_layout;
     private Button login;
+    private ProgressBar bar;
     private TextView forget;
     private TextView register;
     private EditText account;
@@ -53,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         password = password_layout.getEditText();
         constraintLayout = (ConstraintLayout) findViewById(R.id.parent_login);
         view = (View) findViewById(R.id.parent_login);
+        bar = (ProgressBar) findViewById(R.id.loading_login);
 
 //        FancyBackground.on(view)
 //                .set(R.drawable.fbg_fst, R.drawable.fbg_snd, R.drawable.fbg_trd)
@@ -60,6 +65,9 @@ public class LoginActivity extends AppCompatActivity {
 //                .outAnimation(R.anim.fade_out)
 //                .interval(3000)
 //                .start();
+
+        bar.setVisibility(View.GONE);
+        login.setVisibility(View.VISIBLE);
 
         Handler handler = new Handler(){
             @Override
@@ -72,6 +80,16 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     case NOT_EXIST:{
                         Toast.makeText(getApplicationContext(),"账号不存在！",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case LOADING:{
+                        bar.setVisibility(View.VISIBLE);
+                        login.setVisibility(View.GONE);
+                        break;
+                    }
+                    case FINISH:{
+                        bar.setVisibility(View.GONE);
+                        login.setVisibility(View.VISIBLE);
                         break;
                     }
 
@@ -94,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            handler.obtainMessage(LOADING).sendToTarget();
                             while(!Thread.interrupted()){
                                 try{
                                     Thread.sleep(100);
@@ -139,9 +158,11 @@ public class LoginActivity extends AppCompatActivity {
                                     else{
                                         handler.obtainMessage(NOT_EXIST).sendToTarget();
                                     }
+                                    handler.obtainMessage(FINISH).sendToTarget();
                                     rs.close();
                                     st.close();
                                     conn.close();
+
                                     return;
                                 }catch(SQLException e){
                                     Log.v("ss","fail");

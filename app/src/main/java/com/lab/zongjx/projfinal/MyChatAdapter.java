@@ -32,7 +32,7 @@ public class MyChatAdapter extends BaseSwipeAdapter {
 
     @Override
     public View generateView(int position, ViewGroup parent) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.chatitem_chat, null);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.chatitem_chat,parent,false);
         TextView name = (TextView) v.findViewById(R.id.name);
         name.setText(list.get(position));
         SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));

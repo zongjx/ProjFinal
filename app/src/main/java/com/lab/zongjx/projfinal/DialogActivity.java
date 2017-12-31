@@ -2,6 +2,7 @@ package com.lab.zongjx.projfinal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DialogActivity extends AppCompatActivity {
     private Button send;
@@ -53,9 +55,13 @@ public class DialogActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 exit = true;
-                //finish();
+                finish();
             }
         });
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
+        String t=format.format(new Date());
+        Log.e("msg", t);
 
         Handler handler = new Handler(){
             @Override
@@ -74,52 +80,98 @@ public class DialogActivity extends AppCompatActivity {
             }
         };
 
+        Thread threadinit = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(100);
+                    Class.forName("com.mysql.jdbc.Driver");
+                }catch (InterruptedException e){
+                    Log.v("ss",e.toString());
+                }catch (ClassNotFoundException e){
+                    e.printStackTrace();
+                }
+
+                String ip = "120.78.73.208";
+                int port = 3306;
+                String dbName = "zuazu";
+                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                String USER = "root";
+                String PASSWORD = "123456";
+
+                try{
+                    Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+                    Log.v("ss","success");
+                    String sql = "select * from dialog where to_who = '" + intent.getExtras().getString("from") + "' or from_who = '" + intent.getExtras().getString("from") + "';";
+                    Statement st = (Statement) conn.createStatement();
+                    ResultSet rs = st.executeQuery(sql);
+                    while(rs.next()){
+                        dialogitem.add(rs.getString("from_who") + ":" + rs.getString("dialog"));
+                    }
+                    dialogadapter = new MyDialogAdapter(context,dialogitem);
+                    handler.obtainMessage(REFRESH).sendToTarget();
+                    rs.close();
+                    st.close();
+                    conn.close();
+                }catch(SQLException e){
+                    Log.v("ss","fail");
+                    Log.v("ss",e.getMessage());
+                }
+            }
+        });
+        threadinit.start();
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        while(!Thread.interrupted()){
-                            try{
-                                Thread.sleep(100);
-                                Class.forName("com.mysql.jdbc.Driver");
-                            }catch (InterruptedException e){
-                                Log.v("ss",e.toString());
-                            }catch (ClassNotFoundException e){
-                                e.printStackTrace();
-                            }
+                if(!edit.getText().equals("")){
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while(!Thread.interrupted()){
+                                try{
+                                    Thread.sleep(100);
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                }catch (InterruptedException e){
+                                    Log.v("ss",e.toString());
+                                }catch (ClassNotFoundException e){
+                                    e.printStackTrace();
+                                }
 
-                            String ip = "120.78.73.208";
-                            int port = 3306;
-                            String dbName = "zuazu";
-                            String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
-                            String USER = "root";
-                            String PASSWORD = "123456";
+                                String ip = "120.78.73.208";
+                                int port = 3306;
+                                String dbName = "zuazu";
+                                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                                String USER = "root";
+                                String PASSWORD = "123456";
 
-                            try{
-                                Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
-                                Log.v("ss","success");
-                                String sql = "insert into dialog(from_who, to_who, dialog, get) values('" + intent.getExtras().getString("from") + "','"
-                                        + intent.getExtras().getString("to") + "','"
-                                        + edit.getText().toString() + "','0');";
-                                dialogitem.add(intent.getExtras().getString("from") + ":" + edit.getText().toString());
-                                dialogadapter = new MyDialogAdapter(context,dialogitem);
-                                handler.obtainMessage(REFRESH).sendToTarget();
-                                handler.obtainMessage(CLEAR).sendToTarget();
-                                Statement st = (Statement) conn.createStatement();
-                                st.executeUpdate(sql);
-                                st.close();
-                                conn.close();
-                                return;
-                            }catch(SQLException e){
-                                Log.v("ss","fail");
-                                Log.v("ss",e.getMessage());
+                                try{
+                                    Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+                                    Log.v("ss","success");
+                                    String sql = "insert into dialog(from_who, to_who, dialog, get) values('" + intent.getExtras().getString("from") + "','"
+                                            + intent.getExtras().getString("to") + "','"
+                                            + edit.getText().toString() + "','0');";
+                                    dialogitem.add(intent.getExtras().getString("from") + ":" + edit.getText().toString());
+                                    dialogadapter = new MyDialogAdapter(context,dialogitem);
+                                    handler.obtainMessage(REFRESH).sendToTarget();
+                                    handler.obtainMessage(CLEAR).sendToTarget();
+                                    Statement st = (Statement) conn.createStatement();
+                                    st.executeUpdate(sql);
+                                    st.close();
+                                    conn.close();
+                                    return;
+                                }catch(SQLException e){
+                                    Log.v("ss","fail");
+                                    Log.v("ss",e.getMessage());
+                                }
                             }
                         }
-                    }
-                });
-                thread.start();
+                    });
+                    thread.start();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"发送的内容不能为空",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -128,9 +180,9 @@ public class DialogActivity extends AppCompatActivity {
         Thread threadsearch = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(!exit){
+
                     try{
-                        Thread.sleep(4000);
+                        Thread.sleep(2000);
                     }catch (InterruptedException e){
 
                     }
@@ -151,6 +203,7 @@ public class DialogActivity extends AppCompatActivity {
                     String USER = "root";
                     String PASSWORD = "123456";
 
+                while(!exit){
                     try{
                         Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                         Log.v("ss","success");

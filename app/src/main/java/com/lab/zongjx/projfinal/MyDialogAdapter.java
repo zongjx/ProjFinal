@@ -28,8 +28,8 @@ public class MyDialogAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View v, ViewGroup vgroup){
-        v = LayoutInflater.from(context).inflate(R.layout.dialog_chat,null);
+    public View getView(int i, View v, ViewGroup parent){
+        v = LayoutInflater.from(context).inflate(R.layout.dialog_chat,parent,false);
         TextView item = (TextView) v.findViewById(R.id.dialog_chat);
         item.setText(list.get(i));
         return v;
