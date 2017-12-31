@@ -11,10 +11,10 @@ import java.util.List;
 
 public class MyDialogAdapter extends BaseAdapter {
 
-    private List<String> list = null;
+    private List<String[]> list = null;
     private Context context = null;
 
-    public MyDialogAdapter(Context context,List<String> list) {
+    public MyDialogAdapter(Context context,List<String[]> list) {
         this.list = list;
         this.context = context;
     }
@@ -31,12 +31,14 @@ public class MyDialogAdapter extends BaseAdapter {
     public View getView(int i, View v, ViewGroup parent){
         v = LayoutInflater.from(context).inflate(R.layout.dialog_chat,parent,false);
         TextView item = (TextView) v.findViewById(R.id.dialog_chat);
-        item.setText(list.get(i));
+        TextView time = (TextView) v.findViewById(R.id.time_chat);
+        item.setText(list.get(i)[0]);
+        time.setText(list.get(i)[1]);
         return v;
     }
 
     @Override
-    public String getItem(int i){
+    public String[] getItem(int i){
         if(list == null) {
             return null;
         }

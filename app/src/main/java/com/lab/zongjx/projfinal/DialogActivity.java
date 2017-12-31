@@ -27,7 +27,7 @@ public class DialogActivity extends AppCompatActivity {
     private Button send;
     private EditText edit;
     private ListView dialog_list;
-    private ArrayList<String> dialogitem;
+    private ArrayList<String[]> dialogitem;
     private MyDialogAdapter dialogadapter;
     private FloatingActionButton back;
     private Intent intent;
@@ -44,7 +44,7 @@ public class DialogActivity extends AppCompatActivity {
         context = this;
 
         dialog_list = (ListView) findViewById(R.id.list_dialog);
-        dialogitem = new ArrayList<String>();
+        dialogitem = new ArrayList<String[]>();
         dialogadapter = new MyDialogAdapter(this,dialogitem);
         dialog_list.setAdapter(dialogadapter);
         send = (Button) findViewById(R.id.button_dialog);
@@ -58,10 +58,6 @@ public class DialogActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
-        String t=format.format(new Date());
-        Log.e("msg", t);
 
         Handler handler = new Handler(){
             @Override
@@ -106,7 +102,7 @@ public class DialogActivity extends AppCompatActivity {
                     Statement st = (Statement) conn.createStatement();
                     ResultSet rs = st.executeQuery(sql);
                     while(rs.next()){
-                        dialogitem.add(rs.getString("from_who") + ":" + rs.getString("dialog"));
+                        dialogitem.add(new String[]{rs.getString("from_who") + ":" + rs.getString("dialog"),rs.getString("send_time")});
                     }
                     dialogadapter = new MyDialogAdapter(context,dialogitem);
                     handler.obtainMessage(REFRESH).sendToTarget();
@@ -148,10 +144,14 @@ public class DialogActivity extends AppCompatActivity {
                                 try{
                                     Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                                     Log.v("ss","success");
-                                    String sql = "insert into dialog(from_who, to_who, dialog, get) values('" + intent.getExtras().getString("from") + "','"
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
+                                    String t=format.format(new Date());
+                                    Log.e("msg", t);
+                                    String sql = "insert into dialog(from_who, to_who, dialog, get,send_time) values('" + intent.getExtras().getString("from") + "','"
                                             + intent.getExtras().getString("to") + "','"
-                                            + edit.getText().toString() + "','0');";
-                                    dialogitem.add(intent.getExtras().getString("from") + ":" + edit.getText().toString());
+                                            + edit.getText().toString() + "','0','"
+                                            + t + "');";
+                                    dialogitem.add(new String[]{intent.getExtras().getString("from") + ":" + edit.getText().toString(),t});
                                     dialogadapter = new MyDialogAdapter(context,dialogitem);
                                     handler.obtainMessage(REFRESH).sendToTarget();
                                     handler.obtainMessage(CLEAR).sendToTarget();
@@ -180,7 +180,7 @@ public class DialogActivity extends AppCompatActivity {
         Thread threadsearch = new Thread(new Runnable() {
             @Override
             public void run() {
-
+                while(!exit){
                     try{
                         Thread.sleep(2000);
                     }catch (InterruptedException e){
@@ -203,7 +203,7 @@ public class DialogActivity extends AppCompatActivity {
                     String USER = "root";
                     String PASSWORD = "123456";
 
-                while(!exit){
+
                     try{
                         Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                         Log.v("ss","success");
@@ -211,7 +211,7 @@ public class DialogActivity extends AppCompatActivity {
                         Statement st = (Statement) conn.createStatement();
                         ResultSet rs = st.executeQuery(sql);
                         while(rs.next()){
-                            dialogitem.add(rs.getString("from_who") + ":" + rs.getString("dialog"));
+                            dialogitem.add(new String[]{rs.getString("from_who") + ":" + rs.getString("dialog"),rs.getString("send_time")});
                             dialogadapter = new MyDialogAdapter(context,dialogitem);
                             handler.obtainMessage(REFRESH).sendToTarget();
                             String sqlcheck = "update dialog set get = '1' where id = '" + rs.getInt("id") + "';";

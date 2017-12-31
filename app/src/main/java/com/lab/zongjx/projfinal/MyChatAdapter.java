@@ -34,6 +34,8 @@ public class MyChatAdapter extends BaseSwipeAdapter {
     public View generateView(int position, ViewGroup parent) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.chatitem_chat,parent,false);
         TextView name = (TextView) v.findViewById(R.id.name);
+        TextView head = (TextView) v.findViewById(R.id.header);
+        head.setText(list.get(position).substring(0,1));
         name.setText(list.get(position));
         SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {

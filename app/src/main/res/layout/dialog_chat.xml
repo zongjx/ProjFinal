@@ -3,13 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="80dp">
 
     <TextView
         android:id="@+id/dialog_chat"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:text=""
         android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/time_chat"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text=""
+        android:textSize="15sp"/>
 
 </LinearLayout>
