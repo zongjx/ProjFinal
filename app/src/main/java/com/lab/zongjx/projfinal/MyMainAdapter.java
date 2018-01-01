@@ -25,12 +25,14 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static java.lang.Integer.parseInt;
+
 public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewHolder> {
 
     protected ArrayList<String> mtitleSet = new ArrayList();
     protected ArrayList<String> mddlSet = new ArrayList();
     protected ArrayList<String> mnumSet = new ArrayList();
-    protected ArrayList<String> mteammatesSet = new ArrayList();
+    protected ArrayList<ArrayList<String> > mteammatesSet = new ArrayList();
     protected ArrayList<String> mcontentSet = new ArrayList();
     protected ArrayList<String> midSet = new ArrayList();
     protected String maccountName = new String();
@@ -73,7 +75,7 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewH
         }
     }*/
 
-    public MyMainAdapter(String accountName, ArrayList<String> idSet, ArrayList<String> titleSet, ArrayList<String> ddlSet, ArrayList<String> numSet, ArrayList<String> teammatesSet, ArrayList<String> contentSet, Context context) {
+    public MyMainAdapter(String accountName, ArrayList<String> idSet, ArrayList<String> titleSet, ArrayList<String> ddlSet, ArrayList<String> numSet, ArrayList<ArrayList<String> > teammatesSet, ArrayList<String> contentSet, Context context) {
         maccountName = accountName;
         midSet = idSet;
         mtitleSet = titleSet;
@@ -97,14 +99,26 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewH
         holder.item_title.setText(mtitleSet.get(position));
         holder.ddl.setText(mddlSet.get(position));
         holder.num.setText(mnumSet.get(position));
-        holder.teammates.setText(mteammatesSet.get(position));
         holder.content.setText(mcontentSet.get(position));
-        holder.scrollView.requestDisallowInterceptTouchEvent(true);
 
-        String[] ss = mteammatesSet.get(position).split(",");
+        int teammates_num=mteammatesSet.get(position).size();
+        String teammates_name = "";
+        for (int i=0;i<teammates_num;i++){
+            if (i!=teammates_num-1) teammates_name += mteammatesSet.get(position).get(i) + ",";
+            else teammates_name += mteammatesSet.get(position).get(i);
+        }
+        holder.teammates.setText(teammates_name);
+
+        //holder.scrollView.requestDisallowInterceptTouchEvent(true);
+
+        if ( teammates_num-1 == parseInt(mnumSet.get(position),10) ){
+            holder.equitBt.setVisibility(View.INVISIBLE);
+            holder.joinBt.setVisibility(View.INVISIBLE);
+        }
+
         boolean flag = false;
-        for (int i=0;i<ss.length;i++){
-            if (ss[i].equals(maccountName)){
+        for (int i=0;i<teammates_num;i++){
+            if (mteammatesSet.get(position).get(i).equals(maccountName)){
                 flag=true;
                 break;
             }
@@ -138,10 +152,10 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewH
             public void onClick(View v) {
                 if (holder.mFoldableLayout.isFolded()) {
                     holder.mFoldableLayout.unfoldWithAnimation();
-                    holder.cardView.setFocusable(true);
+                   /* holder.cardView.setFocusable(true);
                     holder.cardView.setFocusableInTouchMode(true);
                     holder.cardView.requestFocus();
-                    holder.cardView.requestFocusFromTouch();
+                    holder.cardView.requestFocusFromTouch();*/
                 }
             }
         });
@@ -150,7 +164,6 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewH
         holder.joinBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s = mteammatesSet.get(position) + ","+maccountName;
                 //updateDataBase_join(midSet.get(position),s);
                 Thread refreshthread = new Thread(new Runnable() {
                     @Override
@@ -181,8 +194,11 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewH
                             Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                             Log.v("ss","success");
                             Statement stmt = (Statement) conn.createStatement();
+                            stmt.executeUpdate("update msg set num = num - 1 where msgid = "+midSet.get(position)+";");
 
-                            stmt.executeUpdate("update msg set num = num + 1 , teammates = "+s+" where msgid = "+midSet.get(position)+";");
+                            String sql = String.format("INSERT INTO teammates(msgid,name) VALUES (%s,'%s');",midSet.get(position),maccountName);
+                            stmt.executeUpdate(sql);
+
                             stmt.close();
                             conn.close();
                         }catch(SQLException e){
@@ -230,16 +246,13 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewH
                             Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                             Log.v("ss","success");
                             Statement stmt = (Statement) conn.createStatement();
-                            String[] ss = mteammatesSet.get(position).split(",");
-                            String s = "";
-                            for (int i=0;i<ss.length;i++){
-                                if (!ss[i].equals(maccountName)){
-                                    if (s.equals("")) s += ss[i];
-                                    else s += ","+ss[i];
-                                }
-                            }
-                            if (s.equals(""))stmt.executeUpdate("delete from msg where msgid = "+midSet.get(position)+";");
-                            else stmt.executeUpdate("update msg set num = num - 1 , teammates = "+s+" where msgid = "+midSet.get(position)+";");
+
+                            String sql = String.format("delete from teammates where msgid = %s and name = '%s';",midSet.get(position),maccountName);
+                            stmt.executeUpdate(sql);
+
+                            if (teammates_num-1==0)stmt.executeUpdate("delete from msg where msgid = "+midSet.get(position)+";");
+                            else stmt.executeUpdate("update msg set num = num + 1 where msgid = "+midSet.get(position)+";");
+
                             stmt.close();
                             conn.close();
                         }catch(SQLException e){
@@ -342,8 +355,8 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewH
         @BindView(R.id.scroll)
         protected ScrollView scrollView;
 
-@BindView(R.id.card)
-protected CardView cardView;
+        @BindView(R.id.card)
+        protected CardView cardView;
 
 
         public PhotoViewHolder(FoldableLayout foldableLayout) {

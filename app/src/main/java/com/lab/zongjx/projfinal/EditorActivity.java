@@ -41,23 +41,25 @@ public class EditorActivity extends AppCompatActivity{
     @BindView(R.id.send)
     protected Button send;
 
-    protected void insertDataBase(){
-        String connectString = "jdbc:mysql://120.78.73.208:3306/zuazu"
-                + "?autoReconnect=true&useUnicode=true"
-                + "&characterEncoding=UTF-8";
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con= DriverManager.getConnection(connectString,
-                    "root", "123456");
-            Statement stmt=con.createStatement();
-            String sql = String.format("INSERT INTO msg(title,ddl,num,content,teammates) VALUES ('%s','%s',%s,'%s','%s');",title,ddl,num,content,accountName);
-            stmt.executeUpdate(sql);
-            con.close();
-            stmt.close();
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
-    }
+    /* protected void insertDataBase(){
+         String connectString = "jdbc:mysql://120.78.73.208:3306/zuazu"
+                 + "?autoReconnect=true&useUnicode=true"
+                 + "&characterEncoding=UTF-8";
+         try{
+             Class.forName("com.mysql.jdbc.Driver");
+             Connection con= DriverManager.getConnection(connectString,
+                     "root", "123456");
+             Statement stmt=con.createStatement();
+
+             String sql = String.format("INSERT INTO msg(publisher,title,ddl,num,content) VALUES ('%s','%s',%s,'%s');",title,ddl,num,content);
+             stmt.executeUpdate(sql);
+
+             con.close();
+             stmt.close();
+         }catch (Exception ex){
+             ex.printStackTrace();
+         }
+     }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +106,7 @@ public class EditorActivity extends AppCompatActivity{
                             Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                             Log.v("ss","success");
                             Statement stmt = (Statement) conn.createStatement();
-                            String sql = String.format("INSERT INTO msg(title,ddl,num,content,teammates) VALUES ('%s','%s',%s,'%s','%s');",title,ddl,num,content,accountName);
+                            String sql = String.format("INSERT INTO msg(publisher,title,ddl,num,content) VALUES ('%s','%s','%s',%s,'%s');",accountName,title,ddl,num,content);
                             stmt.executeUpdate(sql);
                             stmt.close();
                             conn.close();

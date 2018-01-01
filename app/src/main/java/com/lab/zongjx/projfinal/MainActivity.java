@@ -61,10 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
     protected FloatingActionButton FAB;
     private RecyclerView mRecyclerView;
+    private ArrayList<String> publisherSet = new ArrayList();
     private ArrayList<String> titleSet = new ArrayList();
     private ArrayList<String> ddlSet = new ArrayList();
     private ArrayList<String> numSet = new ArrayList();
-    private ArrayList<String> teammaresSet = new ArrayList();
+    private ArrayList< ArrayList<String> > teammaresSet = new ArrayList();
     private ArrayList<String> contentSet = new ArrayList();
     private ArrayList<String> idSet = new ArrayList();
 
@@ -256,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 idSet.clear();
+                publisherSet.clear();
                 titleSet.clear();
                 ddlSet.clear();
                 numSet.clear();
@@ -277,12 +279,24 @@ public class MainActivity extends AppCompatActivity {
                     ResultSet rs = st.executeQuery(sql);
                     while(rs.next()){
                         idSet.add(rs.getString("msgid"));
+                        publisherSet.add(rs.getString("publisher"));
                         titleSet.add(rs.getString("title"));
                         ddlSet.add(rs.getString("ddl"));
                         numSet.add(rs.getString("num"));
-                        teammaresSet.add(rs.getString("teammates"));
                         contentSet.add(rs.getString("content"));
                     }
+
+                    for (int i=0;i<idSet.size();i++){
+                        ArrayList<String> tmp = new ArrayList();
+                        tmp.add(publisherSet.get(i));
+                        sql = String.format("select * from teammates where msgid = %s;",idSet.get(i));
+                        rs = st.executeQuery(sql);
+                        while(rs.next()){
+                            tmp.add(rs.getString("name"));
+                        }
+                        teammaresSet.add(tmp);
+                    }
+
                     rs.close();
                     st.close();
                     conn.close();
@@ -310,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         idSet.clear();
+                        publisherSet.clear();
                         titleSet.clear();
                         ddlSet.clear();
                         numSet.clear();
@@ -331,12 +346,24 @@ public class MainActivity extends AppCompatActivity {
                             ResultSet rs = st.executeQuery(sql);
                             while(rs.next()){
                                 idSet.add(rs.getString("msgid"));
+                                publisherSet.add(rs.getString("publisher"));
                                 titleSet.add(rs.getString("title"));
                                 ddlSet.add(rs.getString("ddl"));
                                 numSet.add(rs.getString("num"));
-                                teammaresSet.add(rs.getString("teammates"));
                                 contentSet.add(rs.getString("content"));
                             }
+
+                            for (int i=0;i<idSet.size();i++){
+                                ArrayList<String> tmp = new ArrayList();
+                                tmp.add(publisherSet.get(i));
+                                sql = String.format("select * from teammates where msgid = %s;",idSet.get(i));
+                                rs = st.executeQuery(sql);
+                                while(rs.next()){
+                                    tmp.add(rs.getString("name"));
+                                }
+                                teammaresSet.add(tmp);
+                            }
+
                             rs.close();
                             st.close();
                             conn.close();
@@ -351,10 +378,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         layout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
-
-
-
-
 
 
 
@@ -387,39 +410,39 @@ public class MainActivity extends AppCompatActivity {
         Thread threadsearch = new Thread(new Runnable() {
             @Override
             public void run() {
-                    try {
-                        Thread.sleep(100);
-                        Class.forName("com.mysql.jdbc.Driver");
-                    } catch (InterruptedException e) {
-                        Log.v("ss", e.toString());
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Thread.sleep(100);
+                    Class.forName("com.mysql.jdbc.Driver");
+                } catch (InterruptedException e) {
+                    Log.v("ss", e.toString());
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
 
-                    String ip = "120.78.73.208";
-                    int port = 3306;
-                    String dbName = "zuazu";
-                    String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
-                    String USER = "root";
-                    String PASSWORD = "123456";
+                String ip = "120.78.73.208";
+                int port = 3306;
+                String dbName = "zuazu";
+                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                String USER = "root";
+                String PASSWORD = "123456";
 
-                    try {
-                        Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
-                        Log.v("ss", "success");
-                        String sql = "select * from chat where from_who = '" + intent.getExtras().getString("nickname") + "';";
-                        Statement st = (Statement) conn.createStatement();
-                        ResultSet rs = st.executeQuery(sql);
-                        while (rs.next()) {
-                            chatitem.add(rs.getString("to_who"));
-                        }
-                        handler.obtainMessage(CHATREFRESH).sendToTarget();
-                        rs.close();
-                        st.close();
-                        conn.close();
-                    } catch (SQLException e) {
-                        Log.v("ss", "fail");
-                        Log.v("ss", e.getMessage());
+                try {
+                    Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+                    Log.v("ss", "success");
+                    String sql = "select * from chat where from_who = '" + intent.getExtras().getString("nickname") + "';";
+                    Statement st = (Statement) conn.createStatement();
+                    ResultSet rs = st.executeQuery(sql);
+                    while (rs.next()) {
+                        chatitem.add(rs.getString("to_who"));
                     }
+                    handler.obtainMessage(CHATREFRESH).sendToTarget();
+                    rs.close();
+                    st.close();
+                    conn.close();
+                } catch (SQLException e) {
+                    Log.v("ss", "fail");
+                    Log.v("ss", e.getMessage());
+                }
             }
         });
         threadsearch.start();
