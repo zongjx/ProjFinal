@@ -25,11 +25,21 @@
                 android:text="注册账号"
                 android:textSize="40sp"/>
 
+            <ImageView
+                android:id="@+id/photo_register"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintTop_toBottomOf="@id/title_register"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="20dp"
+                android:src="@mipmap/sysu"/>
+
             <TextView
                 android:id="@+id/label_account_register"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                app:layout_constraintTop_toBottomOf="@id/title_register"
+                app:layout_constraintTop_toBottomOf="@id/photo_register"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/account_register"
                 android:layout_marginTop="20dp"
@@ -41,7 +51,7 @@
                 android:id="@+id/account_register"
                 android:layout_width="300dp"
                 android:layout_height="40dp"
-                app:layout_constraintTop_toBottomOf="@id/title_register"
+                app:layout_constraintTop_toBottomOf="@id/photo_register"
                 app:layout_constraintLeft_toRightOf="@id/label_account_register"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginTop="20dp"

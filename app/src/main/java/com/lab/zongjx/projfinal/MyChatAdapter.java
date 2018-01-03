@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +18,10 @@ import java.util.List;
 
 public class MyChatAdapter extends BaseSwipeAdapter {
 
-    private List<String> list;
+    private List<ChatItem> list;
     private Context mContext;
 
-    public MyChatAdapter(Context mContext,List<String> list) {
+    public MyChatAdapter(Context mContext,List<ChatItem> list) {
         this.list = list;
         this.mContext = mContext;
     }
@@ -33,10 +34,10 @@ public class MyChatAdapter extends BaseSwipeAdapter {
     @Override
     public View generateView(int position, ViewGroup parent) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.chatitem_chat,parent,false);
-        TextView name = (TextView) v.findViewById(R.id.name);
-        TextView head = (TextView) v.findViewById(R.id.header);
-        head.setText(list.get(position).substring(0,1));
-        name.setText(list.get(position));
+        TextView name = (TextView) v.findViewById(R.id.name_chat);
+        ImageView photo = (ImageView) v.findViewById(R.id.photo_chat);
+        photo.setImageBitmap(list.get(position).getPhoto());
+        name.setText(list.get(position).getName());
         SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
@@ -85,7 +86,7 @@ public class MyChatAdapter extends BaseSwipeAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public ChatItem getItem(int position) {
         if(list == null) {
             return null;
         }

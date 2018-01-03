@@ -144,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                                             extras.putInt("id",rs.getInt("id"));
                                             extras.putString("account",rs.getString("account"));
                                             extras.putString("nickname",rs.getString("nickname"));
+                                            extras.putString("photo",rs.getString("photo"));
                                             intent.putExtras(extras);
                                             rs.close();
                                             st.close();
@@ -179,16 +180,16 @@ public class LoginActivity extends AppCompatActivity {
         forget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(LoginActivity.this,);
-                //startActivity(intent);
+                Intent intent = new Intent(LoginActivity.this,ForgetActivity.class);
+                startActivity(intent);
             }
         });
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(LoginActivity.this,);
-                //startActivity(intent);
+                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(intent);
             }
         });
 

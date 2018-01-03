@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.*;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private FlowingDrawer mDrawer;
     private TextView nickname;
     private ListView menu;
+    private ImageView photo;
     private ArrayList<String> choice;
     private MyMenuAdapter choice_adapter;
     private Intent intent;
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private MyMainAdapter adapter;
 
     protected FloatingActionButton FAB;
-    private RecyclerView mRecyclerView;
+    private MyrecyclerView mRecyclerView;
     private ArrayList<String> publisherSet = new ArrayList();
     private ArrayList<String> titleSet = new ArrayList();
     private ArrayList<String> ddlSet = new ArrayList();
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> idSet = new ArrayList();
 
     private ListView chatlist;
-    private ArrayList<String> chatitem;
+    private ArrayList<ChatItem> chatitem;
     private MyChatAdapter chatadapter;
     public static Context maincontext;
 
@@ -147,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     case MAINREFRESH: {
                         adapter = new MyMainAdapter(intent.getExtras().getString("nickname"), idSet, titleSet, ddlSet, numSet, teammaresSet, contentSet,maincontext);
-                        mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);
+                        mRecyclerView = (MyrecyclerView)findViewById(R.id.recycler_view);
                         mRecyclerView.setLayoutManager(new LinearLayoutManager(maincontext));
                         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
                             @Override
@@ -165,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         nickname = (TextView) findViewById(R.id.nickname_main);
+        photo = (ImageView) findViewById(R.id.photo_main);
         menu = (ListView) findViewById(R.id.menu_main);
         choice = new ArrayList<String>(){{
             add("个人信息");
@@ -181,7 +186,12 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0:{
-
+                        Intent nintent  = new Intent(MainActivity.this,InformationActivity.class);
+                        Bundle nextras = new Bundle();
+                        nextras.putString("nickname",intent.getExtras().getString("nickname"));
+                        nextras.putString("account",intent.getExtras().getString("account"));
+                        nintent.putExtras(nextras);
+                        startActivity(nintent);
                         break;
                     }
                     case 1:{
@@ -190,6 +200,10 @@ public class MainActivity extends AppCompatActivity {
                         nexteas.putString("account",intent.getExtras().getString("account"));
                         intent.putExtras(nexteas);
                         startActivity(nintent);
+                        break;
+                    }
+                    case 2:{
+
                         break;
                     }
                     case 3:{
@@ -210,6 +224,8 @@ public class MainActivity extends AppCompatActivity {
                                 })
                                 .create()
                                 .show();
+                        Intent nintent = new Intent(MainActivity.this,LoginActivity.class);
+                        startActivity(nintent);
                         break;
                     }
                 }
@@ -218,6 +234,9 @@ public class MainActivity extends AppCompatActivity {
 
         String temps = "您好！  " + intent.getExtras().getString("nickname");
         nickname.setText(temps);
+        byte[] bitmapArray;
+        bitmapArray = Base64.decode(intent.getExtras().getString("photo"), Base64.DEFAULT);
+        photo.setImageBitmap(BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length));
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -388,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         chatlist = (ListView) findViewById(R.id.chatlist_chat);
-        chatitem = new ArrayList<String>(){{
+        chatitem = new ArrayList<ChatItem>(){{
         }};
         chatadapter = new MyChatAdapter(this,chatitem) {
         };
@@ -399,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent nintent = new Intent(MainActivity.this,DialogActivity.class);
                 Bundle nextras = new Bundle();
                 nextras.putString("from",intent.getExtras().getString("nickname"));
-                nextras.putString("to",chatadapter.getItem(position));
+                nextras.putString("to",chatadapter.getItem(position).getName());
                 nintent.putExtras(nextras);
                 startActivity(nintent);
             }
@@ -429,11 +448,14 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                     Log.v("ss", "success");
-                    String sql = "select * from chat where from_who = '" + intent.getExtras().getString("nickname") + "';";
+                    String sql = "select * from user where nickname = (select to_who from chat where from_who = '" + intent.getExtras().getString("nickname") + "');";
                     Statement st = (Statement) conn.createStatement();
                     ResultSet rs = st.executeQuery(sql);
+
                     while (rs.next()) {
-                        chatitem.add(rs.getString("to_who"));
+                        byte [] temp;
+                        temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
+                        chatitem.add(new ChatItem(BitmapFactory.decodeByteArray(temp, 0, temp.length),rs.getString("nickname")));
                     }
                     handler.obtainMessage(CHATREFRESH).sendToTarget();
                     rs.close();

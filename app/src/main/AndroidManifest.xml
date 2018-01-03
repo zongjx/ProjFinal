@@ -37,6 +37,12 @@
         <activity android:name=".EditorActivity">
 
         </activity>
+        <activity android:name=".InformationActivity">
+
+        </activity>
+        <activity android:name=".Upload">
+
+        </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 
