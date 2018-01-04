@@ -489,6 +489,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         threadsearch.start();
-
     }
 }

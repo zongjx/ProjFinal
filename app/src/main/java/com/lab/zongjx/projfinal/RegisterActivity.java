@@ -221,7 +221,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             }
                                             sql = "insert into user(account, password, nickname, realname, sex, campus, studentid, phone, photo) values('"
                                                     + account.getText().toString() + "','"
-                                                    + password.getText().toString() + "','"
+                                                    + MD5Utils.encode(password.getText().toString())  + "','"
                                                     + nickname.getText().toString() + "','"
                                                     + realname.getText().toString() + "','"
                                                     + tempsex + "','"

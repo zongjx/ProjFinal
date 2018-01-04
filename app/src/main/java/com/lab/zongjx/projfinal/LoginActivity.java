@@ -31,7 +31,6 @@ import java.sql.Statement;
 import tslamic.fancybg.FancyBackground;
 
 public class LoginActivity extends AppCompatActivity {
-//    private static final String TAG = "FancyBackground";
     private final int WRONG_PASSWORD = 1;
     private final int NOT_EXIST = 2;
     private final int LOADING= 3;
@@ -66,14 +65,6 @@ public class LoginActivity extends AppCompatActivity {
         constraintLayout = (ConstraintLayout) findViewById(R.id.parent_login);
         view = (View) findViewById(R.id.parent_login);
         bar = (ProgressBar) findViewById(R.id.loading_login);
-
-//        FancyBackground.on(view)
-//                .set(R.drawable.fbg_fst, R.drawable.fbg_snd, R.drawable.fbg_trd)
-//                .inAnimation(R.anim.fade_in)
-//                .outAnimation(R.anim.fade_out)
-//                .interval(3000)
-//                .start();
-
         bar.setVisibility(View.GONE);
         login.setVisibility(View.VISIBLE);
 
@@ -186,7 +177,8 @@ public class LoginActivity extends AppCompatActivity {
                                 String ip = "120.78.73.208";
                                 int port = 3306;
                                 String dbName = "zuazu";
-                                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName +
+                                        "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
                                 String USER = "root";
                                 String PASSWORD = "123456";
 
@@ -198,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                                     ResultSet rs = st.executeQuery(sql);
                                     if(rs.next()){
                                         Log.v("name","success");
-                                        if(rs.getString("password").equals(password.getText().toString())){
+                                        if(MD5Utils.encode(rs.getString("password")).equals(password.getText().toString())){
                                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                                             Bundle extras = new Bundle();
                                             extras.putInt("id",rs.getInt("id"));
@@ -268,29 +260,5 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-
     }
-
-//    @Override
-//    public void onStarted(FancyBackground bg) {
-//        Log.d(TAG, "Started FancyBackground.");
-//    }
-//
-//    @Override
-//    public void onNew(FancyBackground bg) {
-//        Log.d(TAG, "New pic loaded.");
-//    }
-//
-//    @Override
-//    public void onStopped(FancyBackground bg) {
-//        Log.d(TAG, "Stopped FancyBackground.");
-//    }
-//
-//    @Override
-//    public void onLoopDone(FancyBackground bg) {
-//        Log.d(TAG, "Loop complete.");
-//    }
-
 }
