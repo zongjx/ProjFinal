@@ -36,24 +36,54 @@
                 android:fitsSystemWindows="true"
                 tools:context=".MainActivity">
 
-                <com.baoyz.widget.PullRefreshLayout
+                <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/swipeRefreshLayout">
+                    android:layout_height="match_parent">
 
-                    <com.lab.zongjx.projfinal.MyrecyclerView
-                        android:paddingTop="@dimen/activity_vertical_margin"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:id="@+id/recycler_view"
-                        android:clipToPadding="false"
-                        android:clipChildren="false"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/myheader_main"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:background="@color/colorPrimary">
 
-                    </com.lab.zongjx.projfinal.MyrecyclerView>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:text="主页"/>
 
-                </com.baoyz.widget.PullRefreshLayout>
+                    </android.support.constraint.ConstraintLayout>
+
+
+                    <com.baoyz.widget.PullRefreshLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/swipeRefreshLayout"
+                        app:layout_constraintTop_toBottomOf="@+id/myheader_main"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent">
+
+                        <com.lab.zongjx.projfinal.MyrecyclerView
+                            android:id="@+id/recycler_view"
+                            android:clipToPadding="false"
+                            android:clipChildren="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </com.lab.zongjx.projfinal.MyrecyclerView>
+
+                    </com.baoyz.widget.PullRefreshLayout>
+
+
+                </android.support.constraint.ConstraintLayout>
+
+
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/floatingActionButton"
@@ -84,18 +114,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ListView
-                    android:id="@+id/chatlist_chat"
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/myheader_chat"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="60dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    android:background="@color/colorPrimary">
 
-                </ListView>
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:text="聊天"/>
 
-            </android.support.constraint.ConstraintLayout>
+                </android.support.constraint.ConstraintLayout>
+
+
+                <com.baoyz.widget.PullRefreshLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/swipeRefreshLayout2"
+                    app:layout_constraintTop_toBottomOf="@+id/myheader_chat"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent">
+
+                    <ListView
+                        android:id="@+id/chatlist_chat"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                    </ListView>
+                </com.baoyz.widget.PullRefreshLayout>
+
+                </android.support.constraint.ConstraintLayout>
 
         </FrameLayout>
 
@@ -144,7 +204,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/header_main"
+                app:layout_constraintTop_toBottomOf="@+id/header_main"
                 android:layout_marginTop="20dp"
                 android:text="组啊组"
                 android:textColor="#000000"
@@ -162,7 +222,7 @@
                 android:id="@+id/nickname_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintLeft_toRightOf="@id/photo_main"
+                app:layout_constraintLeft_toRightOf="@+id/photo_main"
                 app:layout_constraintTop_toBottomOf="@+id/title_main"
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="10dp"

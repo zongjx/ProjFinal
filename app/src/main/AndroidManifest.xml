@@ -40,6 +40,9 @@
         <activity android:name=".InformationActivity">
 
         </activity>
+        <activity android:name=".SearchuserActivity">
+
+        </activity>
         <activity android:name=".Upload">
 
         </activity>

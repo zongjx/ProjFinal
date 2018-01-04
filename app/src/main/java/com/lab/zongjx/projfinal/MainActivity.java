@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout chatpage;
     private FrameLayout teampage;
     private PullRefreshLayout layout;
+    private PullRefreshLayout layout2;
     private MyMainAdapter adapter;
 
     protected FloatingActionButton FAB;
@@ -77,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<ChatItem> chatitem;
     private MyChatAdapter chatadapter;
     public static Context maincontext;
+
+    private Thread threadsearch;
 
 
 
@@ -147,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 switch(msg.what){
                     case CHATREFRESH:{
                         chatlist.setAdapter(chatadapter);
+                        layout2.setRefreshing(false);
                         break;
                     }
                     case MAINREFRESH: {
@@ -189,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent nintent  = new Intent(MainActivity.this,InformationActivity.class);
                         Bundle nextras = new Bundle();
                         nextras.putString("nickname",intent.getExtras().getString("nickname"));
+                        nextras.putString("target",intent.getExtras().getString("nickname"));
                         nextras.putString("account",intent.getExtras().getString("account"));
                         nintent.putExtras(nextras);
                         startActivity(nintent);
@@ -198,12 +203,17 @@ public class MainActivity extends AppCompatActivity {
                         Intent nintent = new Intent(MainActivity.this,NewPasswordActivity.class);
                         Bundle nexteas = new Bundle();
                         nexteas.putString("account",intent.getExtras().getString("account"));
-                        intent.putExtras(nexteas);
+                        nintent.putExtras(nexteas);
                         startActivity(nintent);
                         break;
                     }
                     case 2:{
-
+                        Intent nintent = new Intent(MainActivity.this,SearchuserActivity.class);
+                        Bundle nexteas = new Bundle();
+                        nexteas.putString("nickname",intent.getExtras().getString("nickname"));
+                        nexteas.putString("account",intent.getExtras().getString("account"));
+                        nintent.putExtras(nexteas);
+                        startActivity(nintent);
                         break;
                     }
                     case 3:{
@@ -214,6 +224,8 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         finish();
+                                        Intent nintent = new Intent(MainActivity.this,LoginActivity.class);
+                                        startActivity(nintent);
                                     }
                                 })
                                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -224,8 +236,6 @@ public class MainActivity extends AppCompatActivity {
                                 })
                                 .create()
                                 .show();
-                        Intent nintent = new Intent(MainActivity.this,LoginActivity.class);
-                        startActivity(nintent);
                         break;
                     }
                 }
@@ -406,6 +416,19 @@ public class MainActivity extends AppCompatActivity {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
+        layout2 = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout2);
+        layout2.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                threadsearch.start();
+            }
+        });
+        layout2.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+
         chatlist = (ListView) findViewById(R.id.chatlist_chat);
         chatitem = new ArrayList<ChatItem>(){{
         }};
@@ -424,9 +447,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        Thread threadsearch = new Thread(new Runnable() {
+        threadsearch = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -448,10 +469,10 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                     Log.v("ss", "success");
-                    String sql = "select * from user where nickname = (select to_who from chat where from_who = '" + intent.getExtras().getString("nickname") + "');";
+                    String sql = "select * from user where nickname = any(select to_who from chat where from_who = '" + intent.getExtras().getString("nickname") + "');";
                     Statement st = (Statement) conn.createStatement();
                     ResultSet rs = st.executeQuery(sql);
-
+                    chatitem.clear();
                     while (rs.next()) {
                         byte [] temp;
                         temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
@@ -468,5 +489,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         threadsearch.start();
+
     }
 }

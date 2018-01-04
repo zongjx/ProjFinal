@@ -2,18 +2,22 @@ package com.lab.zongjx.projfinal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private final int NOT_EXIST = 2;
     private final int LOADING= 3;
     private final int FINISH = 4;
+    private final int SETLOGO = 5;
     private TextInputLayout account_layout;
     private TextInputLayout password_layout;
     private Button login;
@@ -41,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText account;
     private EditText password;
     private ConstraintLayout constraintLayout;
+    private ImageView logo;
+    private Bitmap photo;
     private View view;
 
     @Override
@@ -48,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        logo = (ImageView) findViewById(R.id.logo_login);
         account_layout = (TextInputLayout) findViewById(R.id.textInputLayout_account_login);
         password_layout = (TextInputLayout) findViewById(R.id.textInputLayout_password_login);
         forget = (TextView) findViewById(R.id.forget_login);
@@ -92,10 +100,62 @@ public class LoginActivity extends AppCompatActivity {
                         login.setVisibility(View.VISIBLE);
                         break;
                     }
+                    case SETLOGO:{
+                        logo.setImageBitmap(photo);
+                        break;
+                    }
 
                 }
             }
         };
+
+        account.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Thread threadsearch = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(100);
+                            Class.forName("com.mysql.jdbc.Driver");
+                        } catch (InterruptedException e) {
+                            Log.v("ss", e.toString());
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        String ip = "120.78.73.208";
+                        int port = 3306;
+                        String dbName = "zuazu";
+                        String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                        String USER = "root";
+                        String PASSWORD = "123456";
+
+                        try {
+                            Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+                            Log.v("ss", "success");
+                            String sql = "select * from user where account = '" + account.getText().toString() + "';";
+                            Statement st = (Statement) conn.createStatement();
+                            ResultSet rs = st.executeQuery(sql);
+
+                            while (rs.next()) {
+                                byte [] temp;
+                                temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
+                                photo = BitmapFactory.decodeByteArray(temp, 0, temp.length);
+                                handler.obtainMessage(SETLOGO).sendToTarget();
+                            }
+                            rs.close();
+                            st.close();
+                            conn.close();
+                        } catch (SQLException e) {
+                            Log.v("ss", "fail");
+                            Log.v("ss", e.getMessage());
+                        }
+                    }
+                });
+                threadsearch.start();
+            }
+        });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
