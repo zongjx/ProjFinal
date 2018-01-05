@@ -34,6 +34,11 @@ public class NewPasswordActivity extends AppCompatActivity {
         intent = this.getIntent();
         extars = intent.getExtras();
 
+        newpassword = (EditText) findViewById(R.id.newpassword_newpassword);
+        confirm_password = (EditText) findViewById(R.id.confirm_password_newpassword);
+        back = (Button) findViewById(R.id.back_newpassword);
+        submit = (Button) findViewById(R.id.submit_newpassword);
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +69,7 @@ public class NewPasswordActivity extends AppCompatActivity {
                 switch(msg.what){
                     case MODIFY_SUCCESS:{
                         Toast.makeText(getApplicationContext(),"修改成功！",Toast.LENGTH_SHORT).show();
+                        finish();
                         break;
                     }
                 }
@@ -107,7 +113,7 @@ public class NewPasswordActivity extends AppCompatActivity {
                                     try{
                                         Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                                         Log.v("ss","success");
-                                        String sql = "update user set password = '" + newpassword.getText().toString() + "' where account = '" + extars.getString("account") + "';";
+                                        String sql = "update user set password = '" + MD5Utils.encode(newpassword.getText().toString()) + "' where account = '" + extars.getString("account") + "';";
                                         Statement st = (Statement) conn.createStatement();
                                         st.executeUpdate(sql);
                                         handler.obtainMessage(MODIFY_SUCCESS).sendToTarget();

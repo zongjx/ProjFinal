@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                                     ResultSet rs = st.executeQuery(sql);
                                     if(rs.next()){
                                         Log.v("name","success");
-                                        if(MD5Utils.encode(rs.getString("password")).equals(password.getText().toString())){
+                                        if(rs.getString("password").equals(MD5Utils.encode(password.getText().toString()))){
                                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                                             Bundle extras = new Bundle();
                                             extras.putInt("id",rs.getInt("id"));
