@@ -113,7 +113,9 @@ public class NewPasswordActivity extends AppCompatActivity {
                                     try{
                                         Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                                         Log.v("ss","success");
-                                        String sql = "update user set password = '" + MD5Utils.encode(newpassword.getText().toString()) + "' where account = '" + extars.getString("account") + "';";
+                                        String sql = "update user set password = '"
+                                                + MD5Utils.encode(newpassword.getText().toString())
+                                                + "' where account = '" + extars.getString("account") + "';";
                                         Statement st = (Statement) conn.createStatement();
                                         st.executeUpdate(sql);
                                         handler.obtainMessage(MODIFY_SUCCESS).sendToTarget();
