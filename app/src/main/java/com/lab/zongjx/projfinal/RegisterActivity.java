@@ -160,7 +160,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                     case SHOW:{
                         progressBar.setVisibility(View.VISIBLE);
-                        submit.setVisibility(View.GONE);
+                        submit.setVisibility(View.INVISIBLE);
                         break;
                     }
                 }
