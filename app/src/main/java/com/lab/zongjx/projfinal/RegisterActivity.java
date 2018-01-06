@@ -185,7 +185,8 @@ public class RegisterActivity extends AppCompatActivity {
                 else if(realname.getText().toString().isEmpty()){
                     Toast.makeText(getApplicationContext(),"姓名不能为空！",Toast.LENGTH_SHORT).show();
                 }
-                else if(sex.getCheckedRadioButtonId() != R.id.sex_male && sex.getCheckedRadioButtonId() != R.id.sex_female && sex.getCheckedRadioButtonId() != R.id.sex_secret){
+                else if(sex.getCheckedRadioButtonId() != R.id.sex_male && sex.getCheckedRadioButtonId() != R.id.sex_female
+                        && sex.getCheckedRadioButtonId() != R.id.sex_secret){
                     Toast.makeText(getApplicationContext(),"性别不能为空！",Toast.LENGTH_SHORT).show();
                 }
                 else if(campus.getText().toString().isEmpty()){
@@ -231,7 +232,8 @@ public class RegisterActivity extends AppCompatActivity {
                                     try{
                                         Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                                         Log.v("ss","success");
-                                        String sql = "select * from user where account = '" + account.getText().toString() + "' or nickname = '" + nickname.getText().toString()  + "';";
+                                        String sql = "select * from user where account = '" + account.getText().toString()
+                                                + "' or nickname = '" + nickname.getText().toString()  + "';";
                                         Statement st = (Statement) conn.createStatement();
                                         ResultSet rs = st.executeQuery(sql);
                                         if(rs.next()){

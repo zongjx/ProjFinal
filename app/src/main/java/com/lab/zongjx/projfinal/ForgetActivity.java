@@ -115,7 +115,8 @@ public class ForgetActivity extends AppCompatActivity {
                         String ip = "120.78.73.208";
                         int port = 3306;
                         String dbName = "zuazu";
-                        String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                        String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName +
+                                "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
                         String USER = "root";
                         String PASSWORD = "123456";
 
@@ -160,7 +161,6 @@ public class ForgetActivity extends AppCompatActivity {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            while(!Thread.interrupted()){
                                 try{
                                     Thread.sleep(100);
                                     Class.forName("com.mysql.jdbc.Driver");
@@ -213,7 +213,6 @@ public class ForgetActivity extends AppCompatActivity {
                                     Log.v("ss",e.getMessage());
                                 }
                             }
-                        }
                     });
                     thread.start();
                 }
