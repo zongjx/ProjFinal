@@ -141,16 +141,19 @@ public class RegisterActivity extends AppCompatActivity {
                 switch(msg.what){
                     case ACCOUNT_EXIST:{
                         progressBar.setVisibility(View.GONE);
+                        submit.setVisibility(View.VISIBLE);
                         Toast.makeText(getApplicationContext(),"此账号已经存在，请注册其他账号！",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case REGISTER_SUCCESS:{
                         progressBar.setVisibility(View.GONE);
+                        submit.setVisibility(View.VISIBLE);
                         Toast.makeText(getApplicationContext(),"注册成功！",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case SHOW:{
                         progressBar.setVisibility(View.VISIBLE);
+                        submit.setVisibility(View.GONE);
                         break;
                     }
                 }
