@@ -45,6 +45,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText campus;
     private EditText studentid;
     private EditText phone;
+    private EditText question;
+    private EditText answer;
     private RadioGroup sex;
     private Button back;
     private Button submit;
@@ -69,6 +71,8 @@ public class RegisterActivity extends AppCompatActivity {
         studentid = (EditText) findViewById(R.id.studentid_register);
         sex = (RadioGroup) findViewById(R.id.sex_register);
         phone = (EditText) findViewById(R.id.phone_register);
+        question = (EditText) findViewById(R.id.question_register);
+        answer = (EditText) findViewById(R.id.answer_register);
         back = (Button) findViewById(R.id.back_register);
         submit = (Button) findViewById(R.id.submit_register);
 
@@ -174,6 +178,12 @@ public class RegisterActivity extends AppCompatActivity {
                 else if(phone.getText().toString().isEmpty()){
                     Toast.makeText(getApplicationContext(),"电话不能为空！",Toast.LENGTH_SHORT).show();
                 }
+                else if(question.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(),"保密问题不能为空！",Toast.LENGTH_SHORT).show();
+                }
+                else if(answer.getText().toString().isEmpty()){
+                    Toast.makeText(getApplicationContext(),"答案不能为空！",Toast.LENGTH_SHORT).show();
+                }
                 else{
                     if(!password.getText().toString().equals(confirm_password.getText().toString())){
                         Toast.makeText(getApplicationContext(),"两次输入的密码不一致！",Toast.LENGTH_SHORT).show();
@@ -219,7 +229,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             else{
                                                 tempsex = "保密";
                                             }
-                                            sql = "insert into user(account, password, nickname, realname, sex, campus, studentid, phone, photo) values('"
+                                            sql = "insert into user(account, password, nickname, realname, sex, campus, studentid, phone, photo, question, answer) values('"
                                                     + account.getText().toString() + "','"
                                                     + MD5Utils.encode(password.getText().toString())  + "','"
                                                     + nickname.getText().toString() + "','"
@@ -228,7 +238,9 @@ public class RegisterActivity extends AppCompatActivity {
                                                     + campus.getText().toString() + "','"
                                                     + studentid.getText().toString() + "','"
                                                     + phone.getText().toString() + "','"
-                                                    + store + "' );";
+                                                    + store + "','"
+                                                    + question.getText().toString() + "','"
+                                                    + MD5Utils.encode(answer.getText().toString()) + "');";
                                             st.executeUpdate(sql);
                                             handler.obtainMessage(REGISTER_SUCCESS).sendToTarget();
                                             rs.close();
