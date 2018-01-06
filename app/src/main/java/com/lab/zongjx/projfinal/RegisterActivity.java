@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import java.sql.Statement;
 public class RegisterActivity extends AppCompatActivity {
     private final int ACCOUNT_EXIST = 1;
     private final int REGISTER_SUCCESS = 2;
+    private final int SHOW = 3;
     private ImageView photo;
     private EditText account;
     private EditText password;
@@ -50,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioGroup sex;
     private Button back;
     private Button submit;
+    private ProgressBar progressBar;
     private Uri imageUri;
     public static final int CROP_PHOTO = 2;
     private byte[] in;
@@ -75,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
         answer = (EditText) findViewById(R.id.answer_register);
         back = (Button) findViewById(R.id.back_register);
         submit = (Button) findViewById(R.id.submit_register);
+        progressBar = (ProgressBar) findViewById(R.id.progress_register);
 
         Resources res = RegisterActivity.this.getResources();
         Bitmap bmp = BitmapFactory.decodeResource(res, R.mipmap.sysu);
@@ -136,14 +140,19 @@ public class RegisterActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 switch(msg.what){
                     case ACCOUNT_EXIST:{
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(),"此账号已经存在，请注册其他账号！",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case REGISTER_SUCCESS:{
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(),"注册成功！",Toast.LENGTH_SHORT).show();
                         break;
                     }
-
+                    case SHOW:{
+                        progressBar.setVisibility(View.VISIBLE);
+                        break;
+                    }
                 }
             }
         };
@@ -192,6 +201,7 @@ public class RegisterActivity extends AppCompatActivity {
                         Thread thread = new Thread(new Runnable() {
                             @Override
                             public void run() {
+                                handler.obtainMessage(SHOW).sendToTarget();
                                     try{
                                         Thread.sleep(100);
                                         Class.forName("com.mysql.jdbc.Driver");
