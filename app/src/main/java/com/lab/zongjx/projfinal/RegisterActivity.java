@@ -37,7 +37,8 @@ import java.sql.Statement;
 public class RegisterActivity extends AppCompatActivity {
     private final int ACCOUNT_EXIST = 1;
     private final int REGISTER_SUCCESS = 2;
-    private final int SHOW = 3;
+    private final int NICKNAME_EXIST = 3;
+    private final int SHOW = 4;
     private ImageView photo;
     private EditText account;
     private EditText password;
@@ -145,6 +146,12 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"此账号已经存在，请注册其他账号！",Toast.LENGTH_SHORT).show();
                         break;
                     }
+                    case NICKNAME_EXIST:{
+                        progressBar.setVisibility(View.GONE);
+                        submit.setVisibility(View.VISIBLE);
+                        Toast.makeText(getApplicationContext(),"此昵称已经存在，请注册其他昵称！",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
                     case REGISTER_SUCCESS:{
                         progressBar.setVisibility(View.GONE);
                         submit.setVisibility(View.VISIBLE);
@@ -224,12 +231,17 @@ public class RegisterActivity extends AppCompatActivity {
                                     try{
                                         Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                                         Log.v("ss","success");
-                                        String sql = "select * from user where account = '" + account.getText().toString() + "';";
+                                        String sql = "select * from user where account = '" + account.getText().toString() + "' or nickname = '" + nickname.getText().toString()  + "';";
                                         Statement st = (Statement) conn.createStatement();
                                         ResultSet rs = st.executeQuery(sql);
                                         if(rs.next()){
                                             Log.v("name","success");
-                                            handler.obtainMessage(ACCOUNT_EXIST).sendToTarget();
+                                            if(rs.getString("account").equals(account.getText().toString())){
+                                                handler.obtainMessage(ACCOUNT_EXIST).sendToTarget();
+                                            }
+                                            else if(rs.getString("nickname").equals(nickname.getText().toString())){
+                                                handler.obtainMessage(NICKNAME_EXIST).sendToTarget();
+                                            }
                                         }
                                         else{
                                             String tempsex;
