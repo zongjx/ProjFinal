@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -35,6 +36,7 @@ public class InformationActivity extends AppCompatActivity {
     private TextView campus;
     private TextView phone;
     private Button contact;
+    private Button dial;
     private Intent intent;
     private final int SUCCESS = 1;
     private final int SETDATA = 2;
@@ -66,6 +68,7 @@ public class InformationActivity extends AppCompatActivity {
         campus = (TextView) findViewById(R.id.campus_info);
         phone = (TextView) findViewById(R.id.phone_info);
         contact = (Button) findViewById(R.id.contact_info);
+        dial = (Button) findViewById(R.id.dial_info);
 
         Handler handler = new Handler(){
             @Override
@@ -148,6 +151,15 @@ public class InformationActivity extends AppCompatActivity {
             }
         });
         thread.start();
+
+        dial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+ phone.getText().toString()));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
 
         contact.setOnClickListener(new View.OnClickListener() {
             @Override

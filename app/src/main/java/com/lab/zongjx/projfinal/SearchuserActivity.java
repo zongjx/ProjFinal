@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class SearchuserActivity extends AppCompatActivity {
     private SearchView searchView;
     private ArrayList<ChatItem> useritem;
-    private MyChatAdapter useradapter;
+    private MySearchAdapter useradapter;
     private ListView userlist;
     private final int CHATREFRESH = 1;
     private Intent intent;
@@ -48,7 +48,7 @@ public class SearchuserActivity extends AppCompatActivity {
         userlist = (ListView) findViewById(R.id.list_search);
         useritem = new ArrayList<ChatItem>(){{
         }};
-        useradapter = new MyChatAdapter(this,useritem) {
+        useradapter = new MySearchAdapter(this,useritem) {
         };
         userlist.setAdapter(useradapter);
         userlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,7 +78,7 @@ public class SearchuserActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 switch(msg.what){
                     case CHATREFRESH:{
-                        useradapter = new MyChatAdapter(getApplicationContext(),useritem) {
+                        useradapter = new MySearchAdapter(getApplicationContext(),useritem) {
                         };
                         userlist.setAdapter(useradapter);
                         break;
