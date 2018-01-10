@@ -130,8 +130,10 @@ public class InformationActivity extends AppCompatActivity {
                     String sql = "select * from user where nickname = '" + intent.getExtras().getString("target") + "';";
                     Statement st = (Statement) conn.createStatement();
                     ResultSet rs = st.executeQuery(sql);
+                    Log.v("target1", intent.getExtras().getString("target"));
                     if(rs.next()) {
                         byte [] temp;
+                        Log.v("target", intent.getExtras().getString("target"));
                         temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
                         sphoto = BitmapFactory.decodeByteArray(temp, 0, temp.length);
                         snickname = rs.getString("nickname");

@@ -9,23 +9,21 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <TextView
+    <ImageView
         android:id="@+id/title_login"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="20dp"
-        android:text="组啊组校园组队系统"
-        android:textColor="#000000"
-        android:textSize="25sp"/>
+        android:src="@mipmap/teammaking"/>
 
     <ImageView
         android:id="@+id/logo_login"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@mipmap/sysu"
+        android:src="@mipmap/account"
         app:layout_constraintTop_toBottomOf="@id/title_login"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

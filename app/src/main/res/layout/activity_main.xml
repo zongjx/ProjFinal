@@ -10,7 +10,7 @@
     android:clipToPadding="false"
     app:edPosition="1"
     app:edMenuSize="300dp"
-    app:edMenuBackground="#55AAFF">
+    app:edMenuBackground="#95a0dd">
 
     <!--content-->
     <LinearLayout
@@ -28,9 +28,6 @@
             android:visibility="visible">
 
             <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
@@ -47,7 +44,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        android:background="@color/colorPrimary">
+                        android:background="#3b3b50">
 
                         <TextView
                             android:layout_height="wrap_content"
@@ -57,9 +54,24 @@
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             android:text="主页"
+                            android:textColor="#FFFFFF"
                             android:textSize="20dp"/>
 
+
+                        <SearchView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/search_main"
+                            android:queryHint="请输入搜索内容"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginEnd="10dp"
+                            android:maxWidth="600dp"
+                            android:queryBackground="@color/colorWhite"/>
+
                     </android.support.constraint.ConstraintLayout>
+
 
 
                     <com.baoyz.widget.PullRefreshLayout
@@ -81,15 +93,12 @@
 
                     </com.baoyz.widget.PullRefreshLayout>
 
-
                 </android.support.constraint.ConstraintLayout>
-
-
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/floatingActionButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginEnd="20dp"
@@ -98,7 +107,8 @@
                     app:borderWidth="0dp"
                     app:elevation="8dp"
                     app:pressedTranslationZ="16dp"
-                    app:rippleColor="#33728dff" />
+                    app:rippleColor="#33728dff"
+                    android:src="@mipmap/edit"/>
 
             </RelativeLayout>
 
@@ -122,7 +132,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:background="@color/colorPrimary">
+                    android:background="#3b3b50">
 
                     <TextView
                         android:layout_height="wrap_content"
@@ -132,6 +142,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:text="交流"
+                        android:textColor="#FFFFFF"
                         android:textSize="20dp"/>
 
                 </android.support.constraint.ConstraintLayout>
@@ -179,7 +190,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:background="@color/colorPrimary">
+                android:background="#3b3b50">
 
                 <TextView
                     android:layout_height="wrap_content"
@@ -189,9 +200,29 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:text="我的组队"
+                    android:textColor="#FFFFFF"
                     android:textSize="20dp"/>
 
                 </android.support.constraint.ConstraintLayout>
+
+                <com.baoyz.widget.PullRefreshLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/swipeRefreshLayout3"
+                    app:layout_constraintTop_toBottomOf="@+id/myheader_team"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent">
+
+                    <com.lab.zongjx.projfinal.MyrecyclerView
+                        android:id="@+id/recycler_view2"
+                        android:clipToPadding="false"
+                        android:clipChildren="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </com.lab.zongjx.projfinal.MyrecyclerView>
+
+                </com.baoyz.widget.PullRefreshLayout>
 
             </android.support.constraint.ConstraintLayout>
 
@@ -221,23 +252,26 @@
             <ImageView
                 android:id="@+id/header_main"
                 android:layout_width="300dp"
-                android:layout_height="170dp"
-                android:src="@mipmap/sysu_header"
+                android:layout_height="200dp"
+                android:src="@mipmap/pic4"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="0dp"
+                app:layout_constraintHorizontal_bias="0.0" />
 
             <TextView
                 android:id="@+id/title_main"
-                android:layout_width="wrap_content"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header_main"
                 android:layout_marginTop="20dp"
-                android:text="组啊组"
-                android:textColor="#000000"
-                android:textSize="25sp"/>
+                android:text="TeamMaking"
+                android:gravity="center"
+                android:foregroundGravity="center"
+                android:textSize="25dp"/>
 
             <ImageView
                 android:id="@+id/photo_main"

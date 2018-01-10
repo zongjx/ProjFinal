@@ -1,9 +1,11 @@
 package com.lab.zongjx.projfinal;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -23,13 +25,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
@@ -48,8 +53,12 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    private long firstTime;
     private final int CHATREFRESH = 1;
     private final int MAINREFRESH = 2;
+    private final int START = 3;
+    private final int MAINREFRESH2 = 4;
+    private final int START2 = 5;
     private FlowingDrawer mDrawer;
     private TextView nickname;
     private ListView menu;
@@ -60,19 +69,20 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout homepage;
     private FrameLayout chatpage;
     private FrameLayout teampage;
-    private PullRefreshLayout layout;
     private PullRefreshLayout layout2;
-    private MyMainAdapter adapter;
 
+    private PullRefreshLayout layout,layout3;
+    private MyMainAdapter adapter,adapter2;
     protected FloatingActionButton FAB;
-    private MyrecyclerView mRecyclerView;
-    private ArrayList<String> publisherSet = new ArrayList();
-    private ArrayList<String> titleSet = new ArrayList();
-    private ArrayList<String> ddlSet = new ArrayList();
-    private ArrayList<String> numSet = new ArrayList();
-    private ArrayList< ArrayList<String> > teammaresSet = new ArrayList();
-    private ArrayList<String> contentSet = new ArrayList();
-    private ArrayList<String> idSet = new ArrayList();
+    protected SearchView searchView;
+    private MyrecyclerView mRecyclerView,mRecyclerView2;
+    private ArrayList<String> publisherSet = new ArrayList(),publisherSet1 = new ArrayList();
+    private ArrayList<String> titleSet = new ArrayList(),titleSet1 = new ArrayList();
+    private ArrayList<String> ddlSet = new ArrayList(),ddlSet1 = new ArrayList();
+    private ArrayList<String> numSet = new ArrayList(),numSet1 = new ArrayList();
+    private ArrayList< ArrayList<String> > teammaresSet = new ArrayList(),teammaresSet1 = new ArrayList();
+    private ArrayList<String> contentSet = new ArrayList(),contentSet1 = new ArrayList();
+    private ArrayList<String> idSet = new ArrayList(),idSet1 = new ArrayList();
 
     private ListView chatlist;
     private ArrayList<ChatItem> chatitem;
@@ -143,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -153,11 +164,11 @@ public class MainActivity extends AppCompatActivity {
                         layout2.setRefreshing(false);
                         break;
                     }
-                    case MAINREFRESH: {
-                        adapter = new MyMainAdapter(intent.getExtras().getString("nickname"), idSet, titleSet, ddlSet, numSet, teammaresSet, contentSet,maincontext);
+                    case START: {
+                        adapter = new MyMainAdapter(intent.getExtras().getString("nickname"), idSet, titleSet, ddlSet, numSet, teammaresSet, contentSet, publisherSet, maincontext);
                         mRecyclerView = (MyrecyclerView)findViewById(R.id.recycler_view);
                         mRecyclerView.setLayoutManager(new LinearLayoutManager(maincontext));
-                        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                        mRecyclerView.addItemDecoration(new MyrecyclerView.ItemDecoration() {
                             @Override
                             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                                 super.getItemOffsets(outRect, view, parent, state);
@@ -165,7 +176,50 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         mRecyclerView.setAdapter(adapter);
+                        break;
+                    }
+                    case MAINREFRESH: {
+                        adapter = new MyMainAdapter(intent.getExtras().getString("nickname"), idSet, titleSet, ddlSet, numSet, teammaresSet, contentSet, publisherSet, maincontext);
+                        mRecyclerView = (MyrecyclerView)findViewById(R.id.recycler_view);
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(maincontext));
+                        mRecyclerView.addItemDecoration(new MyrecyclerView.ItemDecoration() {
+                            @Override
+                            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                                super.getItemOffsets(outRect, view, parent, state);
+                                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin1);
+                            }
+                        });
+                        mRecyclerView.setAdapter(adapter);
                         layout.setRefreshing(false);
+                        break;
+                    }
+                    case START2: {
+                        adapter2 = new MyMainAdapter(intent.getExtras().getString("nickname"), idSet1, titleSet1, ddlSet1, numSet1, teammaresSet1, contentSet1, publisherSet1, maincontext);
+                        mRecyclerView2 = (MyrecyclerView)findViewById(R.id.recycler_view2);
+                        mRecyclerView2.setLayoutManager(new LinearLayoutManager(maincontext));
+                        mRecyclerView2.addItemDecoration(new MyrecyclerView.ItemDecoration() {
+                            @Override
+                            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                                super.getItemOffsets(outRect, view, parent, state);
+                                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin);
+                            }
+                        });
+                        mRecyclerView2.setAdapter(adapter2);
+                        break;
+                    }
+                    case MAINREFRESH2: {
+                        adapter2 = new MyMainAdapter(intent.getExtras().getString("nickname"), idSet1, titleSet1, ddlSet1, numSet1, teammaresSet1, contentSet1, publisherSet1, maincontext);
+                        mRecyclerView2 = (MyrecyclerView)findViewById(R.id.recycler_view2);
+                        mRecyclerView2.setLayoutManager(new LinearLayoutManager(maincontext));
+                        mRecyclerView2.addItemDecoration(new MyrecyclerView.ItemDecoration() {
+                            @Override
+                            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                                super.getItemOffsets(outRect, view, parent, state);
+                                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.activity_vertical_margin1);
+                            }
+                        });
+                        mRecyclerView2.setAdapter(adapter2);
+                        layout3.setRefreshing(false);
                         break;
                     }
                 }
@@ -254,6 +308,36 @@ public class MainActivity extends AppCompatActivity {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ButterKnife.bind(this);
 
+        searchView = (SearchView)findViewById(R.id.search_main);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setQueryHint("请输入关键字");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (searchView != null) {
+                    // 得到输入管理对象
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        // 这将让键盘在所有的情况下都被隐藏，但是一般我们在点击搜索按钮后，输入法都会乖乖的自动隐藏的。
+                        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0); // 输入法如果是显示状态，那么就隐藏输入法
+                        Intent mintent = new Intent(MainActivity.this,SearchResult.class);
+                        Bundle extras = new Bundle();
+                        extras.putString("key",searchView.getQuery().toString());
+                        extras.putString("nickname",intent.getExtras().getString("nickname"));
+                        mintent.putExtras(extras);
+                        startActivityForResult(mintent,0);
+                    }
+                    searchView.clearFocus(); // 不获取焦点
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText){
+                return false;
+            }
+        });
+
         FAB = (FloatingActionButton)findViewById(R.id.floatingActionButton);
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("accountName",intent.getExtras().getString("nickname"));
                 bintent.putExtras(bundle);
-                startActivityForResult(bintent,0);
+                startActivityForResult(bintent,1);
             }
         });
 
@@ -303,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                     Log.v("ss","success");
-                    String sql = "select * from msg ;";
+                    String sql = "select * from msg order by msgid desc;";
                     Statement st = (Statement) conn.createStatement();
                     ResultSet rs = st.executeQuery(sql);
                     while(rs.next()){
@@ -317,9 +401,9 @@ public class MainActivity extends AppCompatActivity {
 
                     for (int i=0;i<idSet.size();i++){
                         ArrayList<String> tmp = new ArrayList();
-                        tmp.add(publisherSet.get(i));
                         sql = String.format("select * from teammates where msgid = %s;",idSet.get(i));
                         rs = st.executeQuery(sql);
+                        tmp.add(publisherSet.get(i));
                         while(rs.next()){
                             tmp.add(rs.getString("name"));
                         }
@@ -333,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.v("ss","fail");
                     Log.v("ss",e.getMessage());
                 }
-                handler.obtainMessage(MAINREFRESH).sendToTarget();
+                handler.obtainMessage(START).sendToTarget();
             }
         });
         refreshthread.start();
@@ -370,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
                         try{
                             Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                             Log.v("ss","success111");
-                            String sql = "select * from msg ;";
+                            String sql = "select * from msg order by msgid desc;";
                             Statement st = (Statement) conn.createStatement();
                             ResultSet rs = st.executeQuery(sql);
                             while(rs.next()){
@@ -384,9 +468,9 @@ public class MainActivity extends AppCompatActivity {
 
                             for (int i=0;i<idSet.size();i++){
                                 ArrayList<String> tmp = new ArrayList();
-                                tmp.add(publisherSet.get(i));
                                 sql = String.format("select * from teammates where msgid = %s;",idSet.get(i));
                                 rs = st.executeQuery(sql);
+                                tmp.add(publisherSet.get(i));
                                 while(rs.next()){
                                     tmp.add(rs.getString("name"));
                                 }
@@ -406,7 +490,7 @@ public class MainActivity extends AppCompatActivity {
                 thread.start();
             }
         });
-        layout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        layout.setRefreshStyle(PullRefreshLayout.STYLE_WATER_DROP);
 
 
 
@@ -427,7 +511,7 @@ public class MainActivity extends AppCompatActivity {
                 threadsearch.start();
             }
         });
-        layout2.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        layout2.setRefreshStyle(PullRefreshLayout.STYLE_WATER_DROP);
 
         chatlist = (ListView) findViewById(R.id.chatlist_chat);
         chatitem = new ArrayList<ChatItem>(){{
@@ -489,5 +573,210 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         threadsearch.start();
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+        Thread refreshthread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(100);
+                }catch (InterruptedException e){
+
+                }
+
+                try{
+                    Thread.sleep(100);
+                    Class.forName("com.mysql.jdbc.Driver");
+                }catch (InterruptedException e){
+                    Log.v("ss",e.toString());
+                }catch (ClassNotFoundException e){
+                    e.printStackTrace();
+                }
+
+                idSet1.clear();
+                publisherSet1.clear();
+                titleSet1.clear();
+                ddlSet1.clear();
+                numSet1.clear();
+                teammaresSet1.clear();
+                contentSet1.clear();
+
+                String ip = "120.78.73.208";
+                int port = 3306;
+                String dbName = "zuazu";
+                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                String USER = "root";
+                String PASSWORD = "123456";
+
+                try{
+                    Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+                    Log.v("ss","success");
+                    String sql = String.format("select * from msg where publisher = '%s' order by msgid desc;",intent.getExtras().getString("nickname"));
+                    Statement st = (Statement) conn.createStatement();
+                    ResultSet rs = st.executeQuery(sql);
+                    while(rs.next()){
+                        idSet1.add(rs.getString("msgid"));
+                        publisherSet1.add(rs.getString("publisher"));
+                        titleSet1.add(rs.getString("title"));
+                        ddlSet1.add(rs.getString("ddl"));
+                        numSet1.add(rs.getString("num"));
+                        contentSet1.add(rs.getString("content"));
+                    }
+
+
+                    ArrayList<String> tmp_idSet = new ArrayList();
+                    sql = String.format("select * from teammates where name = '%s' order by msgid desc;",intent.getExtras().getString("nickname"));
+                    rs = st.executeQuery(sql);
+                    while(rs.next()){
+                        tmp_idSet.add(rs.getString("msgid"));
+                    }
+                    for (int i=0;i<tmp_idSet.size();i++){
+                        sql = String.format("select * from msg where msgid = %s;",tmp_idSet.get(i));
+                        rs = st.executeQuery(sql);
+                        while(rs.next()){
+                            idSet1.add(rs.getString("msgid"));
+                            publisherSet1.add(rs.getString("publisher"));
+                            titleSet1.add(rs.getString("title"));
+                            ddlSet1.add(rs.getString("ddl"));
+                            numSet1.add(rs.getString("num"));
+                            contentSet1.add(rs.getString("content"));
+                        }
+                    }
+
+
+                    for (int i=0;i<idSet1.size();i++){
+                        ArrayList<String> tmp = new ArrayList();
+                        sql = String.format("select * from teammates where msgid = %s;",idSet1.get(i));
+                        rs = st.executeQuery(sql);
+                        tmp.add(publisherSet1.get(i));
+                        while(rs.next()){
+                            tmp.add(rs.getString("name"));
+                        }
+                        teammaresSet1.add(tmp);
+                    }
+
+                    rs.close();
+                    st.close();
+                    conn.close();
+                }catch(SQLException e){
+                    Log.v("ss","fail");
+                    Log.v("ss",e.getMessage());
+                }
+                handler.obtainMessage(START2).sendToTarget();
+            }
+        });
+        refreshthread1.start();
+
+
+        layout3 = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout3);
+        layout3.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Thread thread = new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        try{
+                            Class.forName("com.mysql.jdbc.Driver");
+                        }catch (ClassNotFoundException e){
+                            e.printStackTrace();
+                        }
+
+                        idSet1.clear();
+                        publisherSet1.clear();
+                        titleSet1.clear();
+                        ddlSet1.clear();
+                        numSet1.clear();
+                        teammaresSet1.clear();
+                        contentSet1.clear();
+
+                        String ip = "120.78.73.208";
+                        int port = 3306;
+                        String dbName = "zuazu";
+                        String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                        String USER = "root";
+                        String PASSWORD = "123456";
+
+                        try{
+                            Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+                            Log.v("ss","success111");
+                            String sql = String.format("select * from msg where publisher = '%s' order by msgid desc;",intent.getExtras().getString("nickname"));
+                            Statement st = (Statement) conn.createStatement();
+                            ResultSet rs = st.executeQuery(sql);
+                            while(rs.next()){
+                                idSet1.add(rs.getString("msgid"));
+                                publisherSet1.add(rs.getString("publisher"));
+                                titleSet1.add(rs.getString("title"));
+                                ddlSet1.add(rs.getString("ddl"));
+                                numSet1.add(rs.getString("num"));
+                                contentSet1.add(rs.getString("content"));
+                            }
+
+
+                            ArrayList<String> tmp_idSet = new ArrayList();
+                            sql = String.format("select * from teammates where name = '%s' order by msgid desc;",intent.getExtras().getString("nickname"));
+                            rs = st.executeQuery(sql);
+                            while(rs.next()){
+                                tmp_idSet.add(rs.getString("msgid"));
+                            }
+                            for (int i=0;i<tmp_idSet.size();i++){
+                                sql = String.format("select * from msg where msgid = %s;",tmp_idSet.get(i));
+                                rs = st.executeQuery(sql);
+                                while(rs.next()){
+                                    idSet1.add(rs.getString("msgid"));
+                                    publisherSet1.add(rs.getString("publisher"));
+                                    titleSet1.add(rs.getString("title"));
+                                    ddlSet1.add(rs.getString("ddl"));
+                                    numSet1.add(rs.getString("num"));
+                                    contentSet1.add(rs.getString("content"));
+                                }
+                            }
+
+
+                            for (int i=0;i<idSet1.size();i++){
+                                ArrayList<String> tmp = new ArrayList();
+                                sql = String.format("select * from teammates where msgid = %s;",idSet1.get(i));
+                                rs = st.executeQuery(sql);
+                                tmp.add(publisherSet1.get(i));
+                                while(rs.next()){
+                                    tmp.add(rs.getString("name"));
+                                }
+                                teammaresSet1.add(tmp);
+                            }
+
+                            rs.close();
+                            st.close();
+                            conn.close();
+                            handler.obtainMessage(MAINREFRESH2).sendToTarget();
+                        }catch(SQLException e){
+                            Log.v("ss","fail");
+                            Log.v("ss",e.getMessage());
+                        }
+                    }
+                });
+                thread.start();
+            }
+        });
+        layout3.setRefreshStyle(PullRefreshLayout.STYLE_WATER_DROP);
+    }
+    @Override
+    public void onBackPressed() {
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - firstTime > 2000) {
+            Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            firstTime = secondTime;
+        } else {
+            System.exit(0);
+        }
     }
 }
+

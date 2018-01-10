@@ -82,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progress_register);
 
         Resources res = RegisterActivity.this.getResources();
-        Bitmap bmp = BitmapFactory.decodeResource(res, R.mipmap.sysu);
+        Bitmap bmp = BitmapFactory.decodeResource(res, R.mipmap.account);
         Bitmap bm = Bitmap.createScaledBitmap(bmp,100,100,true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
