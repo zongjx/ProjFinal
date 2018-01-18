@@ -5,26 +5,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lab.zongjx.projfinal.SearchResult">
+    tools:context="com.lab.zongjx.projfinal.SearchResult"
+    android:background="@mipmap/pic5_old">
 
     <com.lab.zongjx.projfinal.MyrecyclerView
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
         android:id="@+id/search_recycler_view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:clipToPadding="false"
         android:clipChildren="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/editorFAB"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@mipmap/skip"/>
+        android:src="@mipmap/skip"
+        tools:layout_editor_absoluteX="314dp" />
 
 </android.support.constraint.ConstraintLayout>
