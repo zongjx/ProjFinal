@@ -40,6 +40,9 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.w3c.dom.ls.LSException;
 
 import java.sql.Connection;
@@ -130,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         intent = this.getIntent();
         maincontext = this;
 
+        EventBus.getDefault().register(this);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -160,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 switch(msg.what){
                     case CHATREFRESH:{
+                        chatadapter = new MyChatAdapter(MainActivity.this,chatitem) {
+                        };
                         chatlist.setAdapter(chatadapter);
                         layout2.setRefreshing(false);
                         break;
@@ -293,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
+                mDrawer.closeMenu();
             }
         });
 
@@ -556,11 +563,12 @@ public class MainActivity extends AppCompatActivity {
                     String sql = "select * from user where nickname = any(select to_who from chat where from_who = '" + intent.getExtras().getString("nickname") + "');";
                     Statement st = (Statement) conn.createStatement();
                     ResultSet rs = st.executeQuery(sql);
-                    chatitem.clear();
+                    chatitem = new ArrayList<ChatItem>(){{
+                    }};
                     while (rs.next()) {
                         byte [] temp;
                         temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
-                        chatitem.add(new ChatItem(BitmapFactory.decodeByteArray(temp, 0, temp.length),rs.getString("nickname")));
+                        chatitem.add(new ChatItem(BitmapFactory.decodeByteArray(temp, 0, temp.length),rs.getString("nickname"),intent.getExtras().getString("nickname")));
                     }
                     handler.obtainMessage(CHATREFRESH).sendToTarget();
                     rs.close();
@@ -778,5 +786,17 @@ public class MainActivity extends AppCompatActivity {
             System.exit(0);
         }
     }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(String s){
+        threadsearch.start();
+    }
+
 }
 

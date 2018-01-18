@@ -7,11 +7,13 @@ public class DialogItem {
     private String dialog;
     private String time;
     private Bitmap photo;
+    private boolean own;
 
-    public DialogItem(String dialog, String time, Bitmap photo){
+    public DialogItem(String dialog, String time, Bitmap photo, boolean own){
         this.dialog = dialog;
         this.time = time;
         this.photo = photo;
+        this.own = own;
     }
 
     public Bitmap getPhoto() {
@@ -26,6 +28,8 @@ public class DialogItem {
         return time;
     }
 
+    public boolean getOwn() {return own;}
+
     public void setDialog(String dialog) {
         this.dialog = dialog;
     }
@@ -37,4 +41,6 @@ public class DialogItem {
     public void setTime(String time) {
         this.time = time;
     }
+
+    public void setOwn(boolean own) {this.own = own;}
 }

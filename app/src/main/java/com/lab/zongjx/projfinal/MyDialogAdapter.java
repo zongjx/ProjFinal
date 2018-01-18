@@ -31,12 +31,24 @@ public class MyDialogAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View v, ViewGroup parent){
         v = LayoutInflater.from(context).inflate(R.layout.dialog_chat,parent,false);
-        TextView dialog = (TextView) v.findViewById(R.id.dialog_chat);
+        TextView dialog1 = (TextView) v.findViewById(R.id.dialog_chat1);
         TextView time = (TextView) v.findViewById(R.id.time_chat);
-        ImageView photo = (ImageView) v.findViewById(R.id.photo_dialog);
-        dialog.setText(list.get(i).getDialog());
+        ImageView photo1 = (ImageView) v.findViewById(R.id.photo_dialog1);
+        ImageView photo2 = (ImageView) v.findViewById(R.id.photo_dialog2);
+        TextView dialog2 = (TextView) v.findViewById(R.id.dialog_chat2);
+        if(list.get(i).getOwn()){
+            photo2.setImageBitmap(list.get(i).getPhoto());
+            dialog2.setText(list.get(i).getDialog());
+            photo1.setVisibility(View.GONE);
+            dialog1.setVisibility(View.GONE);
+        }
+        else{
+            photo1.setImageBitmap(list.get(i).getPhoto());
+            dialog1.setText(list.get(i).getDialog());
+            photo2.setVisibility(View.GONE);
+            dialog2.setVisibility(View.GONE);
+        }
         time.setText(list.get(i).getTime());
-        photo.setImageBitmap(list.get(i).getPhoto());
         return v;
     }
 

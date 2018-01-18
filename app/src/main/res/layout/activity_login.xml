@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:background="@mipmap/pic5">
 
     <ImageView
         android:id="@+id/title_login"
@@ -16,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:src="@mipmap/teammaking"/>
 
     <ImageView
@@ -27,14 +28,14 @@
         app:layout_constraintTop_toBottomOf="@id/title_login"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="0dp"
         />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout_account_login"
         android:layout_width="0dp"
         android:layout_height="90dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:textColorHint="#333333"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

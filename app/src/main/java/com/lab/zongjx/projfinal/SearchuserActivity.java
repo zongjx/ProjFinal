@@ -130,7 +130,7 @@ public class SearchuserActivity extends AppCompatActivity {
                                     while (rs.next()) {
                                         byte [] temp;
                                         temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
-                                        useritem.add(new ChatItem(BitmapFactory.decodeByteArray(temp, 0, temp.length),rs.getString("nickname")));
+                                        useritem.add(new ChatItem(BitmapFactory.decodeByteArray(temp, 0, temp.length),rs.getString("nickname"),intent.getExtras().getString("nickname")));
                                         Log.v("aaa",rs.getString("nickname"));
                                     }
                                     handler.obtainMessage(CHATREFRESH).sendToTarget();

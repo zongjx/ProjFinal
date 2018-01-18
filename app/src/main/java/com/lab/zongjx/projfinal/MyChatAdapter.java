@@ -2,7 +2,10 @@ package com.lab.zongjx.projfinal;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,14 @@ import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyChatAdapter extends BaseSwipeAdapter {
@@ -54,9 +65,49 @@ public class MyChatAdapter extends BaseSwipeAdapter {
                         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                removeItem(position);
-                                notifyDataSetChanged();
+                                System.out.println(position);
+                                Thread threadsearch = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(100);
+                                            Class.forName("com.mysql.jdbc.Driver");
+                                        } catch (InterruptedException e) {
+                                            Log.v("ss", e.toString());
+                                        } catch (ClassNotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        String ip = "120.78.73.208";
+                                        int port = 3306;
+                                        String dbName = "zuazu";
+                                        String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                                        String USER = "root";
+                                        String PASSWORD = "123456";
+
+                                        try {
+                                            Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+                                            Log.v("ss", "success");
+                                            String sql = "delete from chat where from_who = '" + list.get(position).getFrom() + "' and to_who = '" + list.get(position).getName() + "';";
+                                            Statement st = (Statement) conn.createStatement();
+                                            st.executeUpdate(sql);
+                                            st.close();
+                                            conn.close();
+                                        } catch (SQLException e) {
+                                            Log.v("ss", "fail");
+                                            Log.v("ss", e.getMessage());
+                                        }
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (InterruptedException e) {
+                                            Log.v("ss", e.toString());
+                                        }
+                                        EventBus.getDefault().post("update");
+                                    }
+                                });
+                                threadsearch.start();
                                 Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
+
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {

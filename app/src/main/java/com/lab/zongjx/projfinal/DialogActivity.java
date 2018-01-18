@@ -164,10 +164,10 @@ public class DialogActivity extends AppCompatActivity {
                     ResultSet rs = st.executeQuery(sql);
                     while(rs.next()){
                         if(rs.getString("from_who").equals(intent.getExtras().getString("from"))){
-                            dialogitem.add(new DialogItem(rs.getString("from_who") + ":" + rs.getString("dialog"),rs.getString("send_time"),from_photo));
+                            dialogitem.add(new DialogItem(rs.getString("dialog"),rs.getString("send_time"),from_photo,true));
                         }
                         else{
-                            dialogitem.add(new DialogItem(rs.getString("from_who") + ":" + rs.getString("dialog"),rs.getString("send_time"),to_photo));
+                            dialogitem.add(new DialogItem(rs.getString("dialog"),rs.getString("send_time"),to_photo,false));
                         }
                     }
                     dialogadapter = new MyDialogAdapter(context,dialogitem);
@@ -217,7 +217,7 @@ public class DialogActivity extends AppCompatActivity {
                                             + intent.getExtras().getString("to") + "','"
                                             + edit.getText().toString() + "','0','"
                                             + t + "');";
-                                    dialogitem.add(new DialogItem(intent.getExtras().getString("from") + ":" + edit.getText().toString(),t,from_photo));
+                                    dialogitem.add(new DialogItem(edit.getText().toString(),t,from_photo,true));
                                     dialogadapter = new MyDialogAdapter(context,dialogitem);
                                     handler.obtainMessage(REFRESH).sendToTarget();
                                     handler.obtainMessage(CLEAR).sendToTarget();
@@ -278,10 +278,10 @@ public class DialogActivity extends AppCompatActivity {
                         ResultSet rs = st.executeQuery(sql);
                         while(rs.next()){
                             if(rs.getString("from_who").equals(intent.getExtras().getString("from"))){
-                                dialogitem.add(new DialogItem(rs.getString("from_who") + ":" + rs.getString("dialog"),rs.getString("send_time"),from_photo));
+                                dialogitem.add(new DialogItem(rs.getString("dialog"),rs.getString("send_time"),from_photo,true));
                             }
                             else{
-                                dialogitem.add(new DialogItem(rs.getString("from_who") + ":" + rs.getString("dialog"),rs.getString("send_time"),to_photo));
+                                dialogitem.add(new DialogItem(rs.getString("dialog"),rs.getString("send_time"),to_photo,false));
                             }
                             dialogadapter = new MyDialogAdapter(context,dialogitem);
                             handler.obtainMessage(REFRESH).sendToTarget();

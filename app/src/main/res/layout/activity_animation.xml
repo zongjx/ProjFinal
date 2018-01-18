@@ -15,20 +15,24 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="100dp"
-        android:text="no perfect individual"
-        android:textSize="30sp"/>
+        android:text="TM"
+        android:textColor="@color/colorWhite"
+        android:textSize="180sp"/>
 
     <TextView
         android:id="@+id/text2_animation"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text1_animation"
         android:layout_marginTop="40dp"
-        android:text="only a perfect team"
-        android:textSize="30sp" />
+        android:text="no perfect individual        only a perfect team"
+        android:textSize="30sp"
+        android:textColor="@color/colorWhite"
+        android:textAlignment="center"/>
 
+    <!--
     <ImageButton
         android:id="@+id/enter_animation"
         android:layout_width="80dp"
@@ -36,9 +40,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text2_animation"
-        android:layout_marginTop="102dp"
-        android:background="@drawable/mybuttonstyle2"
-        android:src="@drawable/ic_input_black_24dp"/>
+        android:layout_marginTop="60dp"/>-->
 
 
 </android.support.constraint.ConstraintLayout>

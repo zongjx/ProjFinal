@@ -18,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.lab.zongjx.projfinal.MainActivity">
+        tools:context="com.lab.zongjx.projfinal.MainActivity"
+        android:background="@mipmap/pic5_old">
 
         <FrameLayout
             android:id="@+id/home_main"
@@ -72,10 +73,8 @@
 
                     </android.support.constraint.ConstraintLayout>
 
-
-
                     <com.baoyz.widget.PullRefreshLayout
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/swipeRefreshLayout"
                         app:layout_constraintTop_toBottomOf="@+id/myheader_main"
@@ -86,8 +85,8 @@
                             android:id="@+id/recycler_view"
                             android:clipToPadding="false"
                             android:clipChildren="false"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
                         </com.lab.zongjx.projfinal.MyrecyclerView>
 
@@ -128,7 +127,7 @@
                 <android.support.constraint.ConstraintLayout
                     android:id="@+id/myheader_chat"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
+                    android:layout_height="1dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -186,7 +185,7 @@
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/myheader_team"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="1dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -224,6 +223,7 @@
 
                 </com.baoyz.widget.PullRefreshLayout>
 
+
             </android.support.constraint.ConstraintLayout>
 
         </FrameLayout>
@@ -234,6 +234,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?android:attr/windowBackground"
+            android:backgroundTint="#77AAFF"
+            app:itemTextColor="@color/colorWhite"
+            app:itemIconTint="@color/colorWhite"
             app:menu="@menu/navigation" />
 
     </LinearLayout>
@@ -257,7 +260,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginTop="0dp"
                 app:layout_constraintHorizontal_bias="0.0" />
 
             <TextView
