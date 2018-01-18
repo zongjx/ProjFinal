@@ -15,6 +15,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -49,7 +50,6 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewH
     protected ArrayList<String> midSet = new ArrayList();
     protected ArrayList<String> mpublisherSet = new ArrayList();
     protected String maccountName = new String();
-
 
     //protected ArrayList<Map<String,Object>> mData = new ArrayList<Map<String, Object>>();
     //protected String teammates_name = new String();
@@ -565,6 +565,9 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.PhotoViewH
 
         @BindView(R.id.name_list)
         protected ListView name_list;
+
+/*-----------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------*/
 
         public PhotoViewHolder(FoldableLayout foldableLayout) {
             super(foldableLayout);

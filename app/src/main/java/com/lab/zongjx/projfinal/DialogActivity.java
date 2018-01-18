@@ -70,56 +70,6 @@ public class DialogActivity extends AppCompatActivity {
             }
         });
 
-        Thread threadgetphoto = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    Thread.sleep(100);
-                    Class.forName("com.mysql.jdbc.Driver");
-                }catch (InterruptedException e){
-                    Log.v("ss",e.toString());
-                }catch (ClassNotFoundException e){
-                    e.printStackTrace();
-                }
-
-                String ip = "120.78.73.208";
-                int port = 3306;
-                String dbName = "zuazu";
-                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
-                String USER = "root";
-                String PASSWORD = "123456";
-
-                try{
-                    Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
-                    Log.v("ss","success");
-                    String sql = "select * from user where nickname = '" + intent.getExtras().getString("from") + "';";
-                    Statement st = (Statement) conn.createStatement();
-                    ResultSet rs = st.executeQuery(sql);
-                    while(rs.next()){
-                        byte [] temp;
-                        temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
-                        from_photo = BitmapFactory.decodeByteArray(temp, 0, temp.length);
-                    }
-                    sql = "select * from user where nickname = '" + intent.getExtras().getString("to") + "';";
-                    rs = st.executeQuery(sql);
-                    while(rs.next()){
-                        byte [] temp;
-                        temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
-                        to_photo = BitmapFactory.decodeByteArray(temp, 0, temp.length);
-                    }
-                    rs.close();
-                    st.close();
-                    conn.close();
-                }catch(SQLException e){
-                    Log.v("ss","fail");
-                    Log.v("ss",e.getMessage());
-                }
-            }
-        });
-        threadgetphoto.start();
-
-
-
         Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -181,7 +131,59 @@ public class DialogActivity extends AppCompatActivity {
                 }
             }
         });
-        threadinit.start();
+
+
+        Thread threadgetphoto = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(100);
+                    Class.forName("com.mysql.jdbc.Driver");
+                }catch (InterruptedException e){
+                    Log.v("ss",e.toString());
+                }catch (ClassNotFoundException e){
+                    e.printStackTrace();
+                }
+
+                String ip = "120.78.73.208";
+                int port = 3306;
+                String dbName = "zuazu";
+                String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName + "?autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+                String USER = "root";
+                String PASSWORD = "123456";
+
+                try{
+                    Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
+                    Log.v("ss","success");
+                    String sql = "select * from user where nickname = '" + intent.getExtras().getString("from") + "';";
+                    Statement st = (Statement) conn.createStatement();
+                    ResultSet rs = st.executeQuery(sql);
+                    while(rs.next()){
+                        byte [] temp;
+                        temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
+                        from_photo = BitmapFactory.decodeByteArray(temp, 0, temp.length);
+                    }
+                    sql = "select * from user where nickname = '" + intent.getExtras().getString("to") + "';";
+                    rs = st.executeQuery(sql);
+                    while(rs.next()){
+                        byte [] temp;
+                        temp = Base64.decode(rs.getString("photo"), Base64.DEFAULT);
+                        to_photo = BitmapFactory.decodeByteArray(temp, 0, temp.length);
+                    }
+                    rs.close();
+                    st.close();
+                    conn.close();
+                    threadinit.start();
+                }catch(SQLException e){
+                    Log.v("ss","fail");
+                    Log.v("ss",e.getMessage());
+                }
+            }
+        });
+        threadgetphoto.start();
+
+
+
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override

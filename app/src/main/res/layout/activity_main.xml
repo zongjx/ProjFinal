@@ -79,7 +79,8 @@
                         android:id="@+id/swipeRefreshLayout"
                         app:layout_constraintTop_toBottomOf="@+id/myheader_main"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent">
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginBottom="100dp">
 
                         <com.lab.zongjx.projfinal.MyrecyclerView
                             android:id="@+id/recycler_view"
