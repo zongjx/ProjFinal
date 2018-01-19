@@ -5,13 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
     app:cardCornerRadius="10dp"
-    app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="@color/colorAccent">
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@mipmap/pic5_old">
 
         <ScrollView
             android:layout_width="match_parent"
