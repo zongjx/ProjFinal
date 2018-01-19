@@ -109,7 +109,7 @@ public class DialogActivity extends AppCompatActivity {
                 try{
                     Connection conn = DriverManager.getConnection(url, USER, PASSWORD);
                     Log.v("ss","success");
-                    String sql = "select * from dialog where to_who = '" + intent.getExtras().getString("from") + "' or from_who = '" + intent.getExtras().getString("from") + "';";
+                    String sql = "select * from dialog where to_who = '" + intent.getExtras().getString("from") + "' and from_who = '" + intent.getExtras().getString("to") + "' or to_who = '" + intent.getExtras().getString("to") + "' and from_who = '" + intent.getExtras().getString("from") + "';";
                     Statement st = (Statement) conn.createStatement();
                     ResultSet rs = st.executeQuery(sql);
                     while(rs.next()){
