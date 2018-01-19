@@ -2,6 +2,8 @@ package com.lab.zongjx.projfinal;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +29,7 @@ public class EditorActivity extends AppCompatActivity{
     protected String content = new String();
     protected String ddl = new String();
     protected String num = new String();
+    private final int SUCCESS = 1;
 
     @BindView(R.id.editTitle)
     protected EditText editTitle;
@@ -96,6 +99,19 @@ public class EditorActivity extends AppCompatActivity{
             }
         });
 
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch(msg.what){
+                    case SUCCESS:{
+                        Toast.makeText(getApplicationContext(),"创建成功！",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+            }
+        };
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +166,7 @@ public class EditorActivity extends AppCompatActivity{
                                 stmt.executeUpdate(sql);
                                 stmt.close();
                                 conn.close();
+                                handler.obtainMessage(SUCCESS).sendToTarget();
                                 finish();
                             }catch(SQLException e){
                                 Log.v("ss","fail");
